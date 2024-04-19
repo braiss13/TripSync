@@ -20,3 +20,15 @@ $ python app.py
 El proyecto fue creado con **PyCharm**, pero puede utilizarse cualquier otro IDE.
 
 <i>The project was created with **PyCharm**, but you can use any IDE you need.</i>
+
+## Deploy
+
+Al ejecutarse, el programa generará una excepción debido a que no será capaz de enontrar el archivo de configuración `instance/config.json`. Esto es debido a que en este archivo se guarda la clave secreta de la app, y por ello no tiene sentido distribuirla.
+
+Será necesario proporcionar un archivo `instance/config.json` con el contenido de la `SECRET_KEY', por ejemplo:
+
+```json
+{
+  "SECRET_KEY"="Lalala"
+}
+```
