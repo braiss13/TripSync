@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Links management web
 
 ## Intro
@@ -40,3 +41,6 @@ Será necesario proporcionar un archivo `instance/config.json` con el contenido 
 Por supuesto, en una aplicación real, sería conveniente aportar una clave también real, más compleja.
 
 *Of couse, in a real application you should consider to include a proper, more complex key.*
+=======
+# TripSync
+>>>>>>> 769c7714906bc21317c1e2cb8bc90511f4070947
