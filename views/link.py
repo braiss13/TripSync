@@ -1,6 +1,3 @@
-# Links (c) 2024 Baltasar MIT License <baltasarq@gmail.com>
-
-
 import flask
 import sirope
 import flask_login
