@@ -2,7 +2,6 @@ import flask_login
 import sirope
 import werkzeug.security as safe
 
-
 class User(flask_login.mixins.UserMixin):
     def __init__(self, email, pswd):
         self.__email = email

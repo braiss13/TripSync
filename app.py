@@ -4,10 +4,12 @@ import flask_login
 import sirope
 
 from model.User import User
-from model.Link import Link
+from model.Trip import Trip
+from model.Score import Score
 
 from views.user import user_blpr
-from views.link import link_blpr
+from views.trip import trip_blpr
+from views.score import score_blpr
 
 
 def create_app():
@@ -18,7 +20,8 @@ def create_app():
     flapp.config.from_file("instance/config.json", json.load)
     login.init_app(flapp)
     flapp.register_blueprint(user_blpr)
-    flapp.register_blueprint(link_blpr)
+    flapp.register_blueprint(trip_blpr)
+    flapp.register_blueprint(score_blpr)
     return flapp, sirop, login
 ...
 
@@ -82,7 +85,7 @@ def logout():
     return flask.redirect("/")
 ...
 
-
+# Arreglar
 @app.route("/")
 def main():
     usr = User.current()
