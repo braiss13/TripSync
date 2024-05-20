@@ -42,20 +42,20 @@ def get_fav_icon():
 def login():
     if User.current():
         flask_login.logout_user()
-        flask.flash("Ha pasado algo extraño. Por favor, entra de nuevo.")
+        flask.flash("Something wrong happened. Please, enter again.")
         return flask.redirect("/")
     
     usr_email = flask.request.form.get("edEmail", "").strip()
     usr_pswd = flask.request.form.get("edPswd", "").strip()
 
     if (not usr_email or not usr_pswd):
-        flask.flash("Credenciales incompletas")
+        flask.flash("Incomplete credentials")
         return flask.redirect("/")
     
     usr = User.find(srp, usr_email)
 
     if (not usr or not usr.chk_pswd(usr_pswd)):
-        flask.flash("Credenciales incorrectas: ¿has hecho el registro?")
+        flask.flash("Incorrect credentials: have you registered?")
         return flask.redirect("/")
     
     flask_login.login_user(usr)
