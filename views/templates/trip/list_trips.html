@@ -1,0 +1,26 @@
+{% extends "skeleton.html" %}
+
+{% block contents %}
+{% if trips %}
+    <div class="card" id="dvTrips" style="margin: 10px">
+        <div class="card-header">Trips</div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush list-group-numbered">
+            {% for trip in trips %}
+                <li class="list-group-item">
+                    <div>
+                        <strong>Time:</strong> {{ trip.time }}<br/>
+                        <strong>Origin:</strong> {{ trip.origin }}<br/>
+                        <strong>Destination:</strong> {{ trip.destination }}<br/>
+                        <strong>Duration:</strong> {{ trip.duration }} hours<br/>
+                        <strong>Fare:</strong> ${{ trip.fare }}<br/>
+                    </div>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% else %}
+    <b>No trips found...</b>
+{% endif %}
+{% endblock %}

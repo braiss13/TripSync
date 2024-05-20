@@ -1,0 +1,35 @@
+{% extends "skeleton.html" %}
+
+{% block contents %}
+
+{% if usr %}
+
+<div id="dvAddScore" class="card" style="margin: 10px">
+    <div class="card-header">Add New Score</div>
+    <div class="card-body">
+        <form id="frmNewScore" name="frmNewScore" action="/score/add" method="POST">
+            <label for="edTripId">Trip ID</label>
+            <input type="text" id="edTripId" name="edTripId" placeholder="trip id..." class="form-control" required />
+            <br/>
+            <label for="edUserId">User ID</label>
+            <input type="text" id="edUserId" name="edUserId" placeholder="user id..." class="form-control" required />
+            <br/>
+            <label for="edScore">Score</label>
+            <input type="number" min="1" max="5" id="edScore" name="edScore" placeholder="score (1-5)..." class="form-control" required />
+            <br/>
+            <div style="margin: 5px">
+                <a href="#" onclick="document.frmNewScore.submit()" class="btn btn-primary">
+                    <img width="24px" src="/static/add.svg" title="Add" />
+                    &nbsp; Add
+                </a>
+                <a href="#" onclick="window.location='/'" class="btn btn-primary">
+                    <img width="24px" src="/static/back.svg" title="Back" />
+                    &nbsp; Back
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endif %}
+{% endblock %}

@@ -1,0 +1,8 @@
+<div>
+    <b>{{ trip.time }}</b>:&nbsp;<a style="font-size: 120%" target="_blank" href="{{ trip.origin }}">
+        <i>{{ trip.origin }}</i></a>&nbsp;→&nbsp;<a style="font-size: 120%" target="_blank"
+        href="{{ trip.destination }}">
+        <i>{{ trip.destination }}</i></a><br />
+    <b>Duration:</b>:&nbsp;<span style="font-size: 120%">{{ trip.duration }}</span>&nbsp;hours<br />
+    <b>Fare:</b>:&nbsp;<span style="font-size: 120%">${{ trip.fare }}</span><br />
+</div>

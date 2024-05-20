@@ -1,4 +1,3 @@
-# model/Score.py
 import sirope
 from datetime import datetime
 
