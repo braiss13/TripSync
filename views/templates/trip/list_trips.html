@@ -8,13 +8,7 @@
             <ul class="list-group list-group-flush list-group-numbered">
             {% for trip in trips %}
                 <li class="list-group-item">
-                    <div>
-                        <strong>Time:</strong> {{ trip.time }}<br/>
-                        <strong>Origin:</strong> {{ trip.origin }}<br/>
-                        <strong>Destination:</strong> {{ trip.destination }}<br/>
-                        <strong>Duration:</strong> {{ trip.duration }} hours<br/>
-                        <strong>Fare:</strong> ${{ trip.fare }}<br/>
-                    </div>
+                    {% include "trip_entry.html" %}
                 </li>
             {% endfor %}
             </ul>

@@ -8,11 +8,7 @@
             <ul class="list-group list-group-flush list-group-numbered">
             {% for score in scores %}
                 <li class="list-group-item">
-                    <div>
-                        <strong>Score:</strong> {{ score.value }}<br/>
-                        <strong>Trip ID:</strong> {{ score.trip_id }}<br/>
-                        <strong>User ID:</strong> {{ score.user_id }}<br/>
-                    </div>
+                    {% include "score_entry.html" %}
                 </li>
             {% endfor %}
             </ul>
