@@ -1,7 +1,7 @@
 import sirope
 from datetime import datetime
 
-class Score(sirope.Model):
+class Score():
     def __init__(self, trip_id, user_id, rating, date=None):
         self.__trip_id = trip_id
         self.__user_id = user_id

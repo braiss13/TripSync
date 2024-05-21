@@ -1,6 +1,6 @@
 import sirope
 
-class Trip(sirope.Model):
+class Trip():
     def init(self, time, origin, destination, duration, fare):
         self.__time = time
         self.__origin = origin

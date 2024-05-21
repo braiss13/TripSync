@@ -1,37 +1,56 @@
-# Contenido generado por ChatGPT, ¡¡REVISAR!!
-
-# views/score.py
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from model.Score import Score
-from model.Trip import Trip
-from model.User import User
+import flask
 import sirope
+from flask_login import login_required, current_user
+from model.Score import Score
+from model.User import User
+from model.Trip import Trip
 
-score_bp = Blueprint('scores', __name__)
+def get_blprint():
+    score_module = flask.blueprints.Blueprint("score_blpr", __name__,
+                                              url_prefix="/score",
+                                              template_folder="templates/score",
+                                              static_folder="static")
+    srp = sirope.Sirope()
+    return score_module, srp
 
-@score_bp.route('/scores')
-def index():
-    s = sirope.Sirope()
-    scores = list(s.load_all(Score))
-    return render_template('scores/index.html', scores=scores)
+score_blpr, srp = get_blprint()
 
-@score_bp.route('/scores/add', methods=['GET', 'POST'])
-def add_score():
-    s = sirope.Sirope()
-    if request.method == 'POST':
-        trip_id = request.form['trip_id']
-        user_id = request.form['user_id']
-        rating = request.form['rating']
+@score_blpr.route("/add", methods=["GET", "POST"])
+@login_required
+def score_add():
+    if flask.request.method == "POST":
+        trip_id = flask.request.form.get("edTripId", "").strip()
+        user_id = flask.request.form.get("edUserId", "").strip()
+        rating = flask.request.form.get("edRating", "").strip()
 
-        # Verificar que el viaje y el usuario existan
-        trip = s.find_first(Trip, lambda t: t.id == trip_id)
-        user = s.find_first(User, lambda u: u.id == user_id)
-        
-        if trip and user:
-            new_score = Score(trip_id, user_id, rating)
-            s.save(new_score)
-            return redirect(url_for('scores.index'))
-        else:
-            flash('Invalid trip ID or user ID')
+        if (not trip_id or not user_id or not rating):
+            flask.flash("All fields are required.")
+            return flask.redirect("/score/add")
 
-    return render_template('scores/add_score.html')
+        try:
+            rating = int(rating)
+            if rating < 1 or rating > 5:
+                raise ValueError
+        except ValueError:
+            flask.flash("Rating must be an integer between 1 and 5.")
+            return flask.redirect("/score/add")
+
+        trip = srp.find_first(Trip, lambda t: t.get_safe_id(srp) == trip_id)
+        user = srp.find_first(User, lambda u: u.get_safe_id(srp) == user_id)
+
+        if not trip or not user:
+            flask.flash("Invalid Trip ID or User ID.")
+            return flask.redirect("/score/add")
+
+        score = Score(trip_id, user_id, rating)
+        srp.save(score)
+        flask.flash("Score added successfully.")
+        return flask.redirect("/")
+    
+    return flask.render_template("score/add_score.html")
+
+@score_blpr.route("/list", methods=["GET"])
+@login_required
+def score_list():
+    scores = srp.filter(Score, lambda s: s.user_id == current_user.id)
+    return flask.render_template("score/list_scores.html", scores=scores)

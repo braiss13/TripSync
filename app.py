@@ -27,7 +27,7 @@ app, srp, lm = create_app()
 
 @lm.unauthorized_handler
 def unauthorized_handler():
-    flask.flash("Unauthorized")
+    flask.flash("Unauthorized access")
     return flask.redirect("/")
 
 @lm.user_loader
@@ -42,20 +42,20 @@ def get_fav_icon():
 def login():
     if User.current():
         flask_login.logout_user()
-        flask.flash("Something wrong happened. Please, enter again.")
+        flask.flash("Something strange happened. Please log in again.")
         return flask.redirect("/")
     
     usr_email = flask.request.form.get("edEmail", "").strip()
     usr_pswd = flask.request.form.get("edPswd", "").strip()
 
-    if (not usr_email or not usr_pswd):
+    if not usr_email or not usr_pswd:
         flask.flash("Incomplete credentials")
         return flask.redirect("/")
     
     usr = User.find(srp, usr_email)
 
-    if (not usr or not usr.chk_pswd(usr_pswd)):
-        flask.flash("Incorrect credentials: have you registered?")
+    if not usr or not usr.chk_pswd(usr_pswd):
+        flask.flash("Incorrect credentials: Have you registered?")
         return flask.redirect("/")
     
     flask_login.login_user(usr)
