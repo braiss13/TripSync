@@ -1,41 +1,30 @@
 {% extends "skeleton.html" %}
 
 {% block contents %}
-
-{% if usr %}
-
-<div id="dvAddTrip" class="card" style="margin: 10px">
-    <div class="card-header">Add New Trip</div>
-    <div class="card-body">
-        <form id="frmNewTrip" name="frmNewTrip" action="/trip/add" method="POST">
-            <label for="edTime">Time</label>
-            <input type="datetime-local" id="edTime" name="edTime" placeholder="time..." class="form-control" required min="{{ min_date_time }}" />
-            <br/>
-            <label for="edOrigin">Origin</label>
-            <input type="text" id="edOrigin" name="edOrigin" placeholder="origin..." class="form-control" required />
-            <br/>
-            <label for="edDestination">Destination</label>
-            <input type="text" id="edDestination" name="edDestination" placeholder="destination..." class="form-control" required />
-            <br/>
-            <label for="edDuration">Duration (minutes)</label>
-            <input type="number" id="edDuration" name="edDuration" placeholder="duration..." class="form-control" required />
-            <br/>
-            <label for="edFare">Fare ($)</label>
-            <input type="number" step="0.01" id="edFare" name="edFare" placeholder="fare..." class="form-control" required />
-            <br/>
-            <div style="margin: 5px">
-                <a href="#" onclick="document.frmNewTrip.submit()" class="btn btn-primary">
-                    <img width="24px" src="/static/add.svg" title="Add" />
-                    &nbsp; Add
-                </a>
-                <a href="#" onclick="window.location='/'" class="btn btn-primary">
-                    <img width="24px" src="/static/back.svg" title="Back" />
-                    &nbsp; Back
-                </a>
-            </div>
-        </form>
+    <div id="dvAddTrip" class="card" style="margin: 10px">
+        <div class="card-header">Add New Trip</div>
+        <div class="card-body">
+            <form id="frmNewTrip" name="frmNewTrip" action="/trip/add" method="POST">
+                <label for="edTime">Time</label>
+                <input type="datetime-local" id="edTime" name="edTime" placeholder="time..." class="form-control" required min="{{ min_date_time }}" />
+                <br/>
+                <label for="edOrigin">Origin</label>
+                <input type="text" id="edOrigin" name="edOrigin" placeholder="origin..." class="form-control" required />
+                <br/>
+                <label for="edDestination">Destination</label>
+                <input type="text" id="edDestination" name="edDestination" placeholder="destination..." class="form-control" required />
+                <br/>
+                <label for="edDuration">Duration (minutes)</label>
+                <input type="number" id="edDuration" name="edDuration" placeholder="duration..." class="form-control" required />
+                <br/>
+                <label for="edFare">Fare ($)</label>
+                <input type="number" step="0.01" id="edFare" name="edFare" placeholder="fare..." class="form-control" required />
+                <br/>
+                <div style="margin: 5px">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                    <a href="/" class="btn btn-secondary">Back</a>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-
-{% endif %}
 {% endblock %}

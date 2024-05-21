@@ -24,10 +24,14 @@ class Trip():
     @property
     def duration(self):
         return self.__duration
+    
+    @property
+    def user_id(self):
+        return self.__user_id
 
     @property
     def fare(self):
         return self.__fare
-    @property
-    def get_id(self):
-        return self.id
+    
+    def get_safe_id(self, srp):
+        return srp.safe_from_oid(self.__oid__)

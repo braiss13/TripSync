@@ -73,20 +73,18 @@ def logout():
 def main():
     usr = User.current()
     trip_list = []
-    score_list = []
 
     if usr:
-        trip_list = srp.filter(Trip, lambda t: t.user_id == usr.email)
-        score_list = srp.filter(Score, lambda s: s.user_id == usr.email)
+        trip_list = list(srp.filter(Trip, lambda t: t.user_id == usr.get_id()))
     
     sust = {
         "usr": usr,
         "srp": srp,
-        "trip_list": trip_list,
-        "score_list": score_list
+        "trip_list": trip_list
     }
 
     return flask.render_template("index.html", **sust)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,20 +1,25 @@
 {% extends "skeleton.html" %}
 
 {% block contents %}
-{% if trips %}
     <div class="card" id="dvTrips" style="margin: 10px">
         <div class="card-header">Trips</div>
         <div class="card-body">
-            <ul class="list-group list-group-flush list-group-numbered">
-            {% for trip in trips %}
-                <li class="list-group-item">
-                    {% include "trip_entry.html" %}
-                </li>
-            {% endfor %}
-            </ul>
+            {% if trips %}
+                <ul class="list-group list-group-flush list-group-numbered">
+                    {% for trip in trips %}
+                        <li class="list-group-item">
+                            <b>{{ trip.origin }} to {{ trip.destination }}</b><br/>
+                            <span>{{ trip.time }} | Duration: {{ trip.duration }} mins | Fare: ${{ trip.fare }}</span>
+                            <form method="get" action="{{ url_for('trip_blpr.trip_delete') }}" style="display:inline;">
+                                <input type="hidden" name="trip_id" value="{{ trip.get_safe_id(srp) }}">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <b>No trips found.</b>
+            {% endif %}
         </div>
     </div>
-{% else %}
-    <b>No trips found...</b>
-{% endif %}
 {% endblock %}
