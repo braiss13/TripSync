@@ -27,7 +27,7 @@ app, srp, lm = create_app()
 
 @lm.unauthorized_handler
 def unauthorized_handler():
-    flask.flash("Unauthorized access")
+    flask.flash("Unauthorized access", "danger")
     return flask.redirect("/")
 
 @lm.user_loader
@@ -42,29 +42,31 @@ def get_fav_icon():
 def login():
     if User.current():
         flask_login.logout_user()
-        flask.flash("Something strange happened. Please log in again.")
+        flask.flash("Something strange happened. Please log in again.", "danger")
         return flask.redirect("/")
     
     usr_email = flask.request.form.get("edEmail", "").strip()
     usr_pswd = flask.request.form.get("edPswd", "").strip()
 
     if not usr_email or not usr_pswd:
-        flask.flash("Incomplete credentials")
+        flask.flash("Incomplete credentials", "danger")
         return flask.redirect("/")
     
     usr = User.find(srp, usr_email)
 
     if not usr or not usr.chk_pswd(usr_pswd):
-        flask.flash("Incorrect credentials: Have you registered?")
+        flask.flash("Incorrect credentials: Have you registered?", "danger")
         return flask.redirect("/")
     
     flask_login.login_user(usr)
+    flask.flash("Login successful!", "success")
     return flask.redirect("/")
 
 @flask_login.login_required
 @app.route("/logout")
 def logout():
     flask_login.logout_user()
+    flask.flash("You have been logged out.", "success")
     return flask.redirect("/")
 
 @app.route("/")
@@ -74,8 +76,8 @@ def main():
     score_list = []
 
     if usr:
-        trip_list = srp.filter(Trip, lambda t: t.user_id == usr.id)
-        score_list = srp.filter(Score, lambda s: s.user_id == usr.id)
+        trip_list = srp.filter(Trip, lambda t: t.user_id == usr.email)
+        score_list = srp.filter(Score, lambda s: s.user_id == usr.email)
     
     sust = {
         "usr": usr,

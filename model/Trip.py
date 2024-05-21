@@ -1,12 +1,13 @@
 import sirope
 
 class Trip():
-    def init(self, time, origin, destination, duration, fare):
+    def __init__(self, time, origin, destination, duration, fare, user_id):
         self.__time = time
         self.__origin = origin
         self.__destination = destination
         self.__duration = duration
         self.__fare = fare
+        self.__user_id = user_id
 
     @property
     def time(self):
@@ -27,3 +28,6 @@ class Trip():
     @property
     def fare(self):
         return self.__fare
+    @property
+    def get_id(self):
+        return self.id
