@@ -43,6 +43,42 @@ def trip_add():
     min_date_time = datetime.now().strftime('%Y-%m-%dT%H:%M')
     return flask.render_template("trip/add_trip.html", usr=usr, min_date_time=min_date_time, srp=srp)
 
+@trip_blpr.route("/edit/<trip_id>", methods=["GET", "POST"])
+@login_required
+def trip_edit(trip_id):
+    trip_oid = srp.oid_from_safe(trip_id)
+    trip = srp.load(trip_oid)
+
+    if flask.request.method == "POST":
+        time = flask.request.form.get("edTime", "").strip()
+        origin = flask.request.form.get("edOrigin", "").strip()
+        destination = flask.request.form.get("edDestination", "").strip()
+        duration = flask.request.form.get("edDuration", "").strip()
+        fare = flask.request.form.get("edFare", "").strip()
+
+        if not time or not origin or not destination or not duration or not fare:
+            flask.flash("All fields are required.", "danger")
+            return flask.redirect(f"/trip/edit/{trip_id}")
+        try:
+            duration = int(duration)
+            fare = float(fare)
+        except ValueError:
+            flask.flash("Duration must be an integer and fare must be a number.", "danger")
+            return flask.redirect(f"/trip/edit/{trip_id}")
+
+        trip.time = time
+        trip.origin = origin
+        trip.destination = destination
+        trip.duration = duration
+        trip.fare = fare
+        srp.save(trip)
+        flask.flash("Trip updated successfully.", "success")
+        return flask.redirect("/")
+    
+    usr = current_user
+    min_date_time = datetime.now().strftime('%Y-%m-%dT%H:%M')
+    return flask.render_template("trip/edit_trip.html", trip=trip, usr=usr, min_date_time=min_date_time, srp=srp)
+
 @login_required
 @trip_blpr.route("/delete")
 def trip_delete():

@@ -15,18 +15,34 @@ class Trip():
     def time(self):
         return self.__time
 
+    @time.setter
+    def time(self, value):
+        self.__time = value
+
     @property
     def origin(self):
         return self.__origin
+
+    @origin.setter
+    def origin(self, value):
+        self.__origin = value
 
     @property
     def destination(self):
         return self.__destination
 
+    @destination.setter
+    def destination(self, value):
+        self.__destination = value
+
     @property
     def duration(self):
         return self.__duration
     
+    @duration.setter
+    def duration(self, value):
+        self.__duration = value
+
     @property
     def user_id(self):
         return self.__user_id
@@ -35,6 +51,10 @@ class Trip():
     def fare(self):
         return self.__fare
     
+    @fare.setter
+    def fare(self, value):
+        self.__fare = value
+
     def get_safe_id(self, srp):
         return srp.safe_from_oid(self.__oid__)
 

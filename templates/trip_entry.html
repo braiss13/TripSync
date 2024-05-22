@@ -4,10 +4,15 @@
         <span>{{ trip.get_formatted_time() }} | Duration: {{ trip.duration }} mins | Fare: ${{ trip.fare }}</span><br/>
         <span>Created by: {{ trip.user_id }}</span>
     </div>
-    <form method="get" action="{{ url_for('trip_blpr.trip_delete') }}" style="display:inline;">
-        <input type="hidden" name="trip_id" value="{{ trip.get_safe_id(srp) }}">
-        <button type="submit" class="btn btn-danger btn-sm">
-            Delete
-        </button>
-    </form>
+    <div>
+        <a href="{{ url_for('trip_blpr.trip_edit', trip_id=trip.get_safe_id(srp)) }}" class="btn btn-warning btn-sm">
+            Edit
+        </a>
+        <form method="get" action="{{ url_for('trip_blpr.trip_delete') }}" style="display:inline;">
+            <input type="hidden" name="trip_id" value="{{ trip.get_safe_id(srp) }}">
+            <button type="submit" class="btn btn-danger btn-sm">
+                Delete
+            </button>
+        </form>
+    </div>
 </div>
