@@ -3,11 +3,11 @@
 {% block contents %}
 {% if usr %}
 <div class="card" id="dvTrips" style="margin: 10px">
-  <div class="card-header">Trips</div>
+  <div class="card-header">My Trips</div>
   <div class="card-body">
-      {% if trip_list %}
+      {% if my_trip_list %}
           <ul class="list-group list-group-flush list-group-numbered">
-          {% for trip in trip_list %}
+          {% for trip, creator_name in my_trip_list %}
               <li class="list-group-item">
                   {% include "trip_entry.html" %}
               </li>
@@ -25,9 +25,33 @@
       </div>
   </div>
 </div>
+
+<div class="card" id="dvOtherTrips" style="margin: 10px; margin-top: 20px;">
+  <div class="card-header">Other Trips</div>
+  <div class="card-body">
+      {% if other_trip_list %}
+          <ul class="list-group list-group-flush list-group-numbered">
+          {% for trip, creator_name in other_trip_list %}
+              <li class="list-group-item">
+                  <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                          <b>{{ trip.origin }} to {{ trip.destination }}</b><br/>
+                          <span>{{ trip.get_formatted_time() }} | Duration: {{ trip.duration }} mins | Fare: {{ trip.fare }} €</span><br/>
+                          <span>Created by: <a href="{{ url_for('user_blpr.user_profile', user_id=trip.user_id) }}">{{ creator_name }}</a></span>
+                      </div>
+                  </div>
+              </li>
+          {% endfor %}
+          </ul>
+      {% else %}
+          <b>No trips found...</b>
+      {% endif %}
+  </div>
+</div>
+
 {% else %}
 <div id="dvLogin" class="card" style="margin: 10px; max-width: 1000px; margin: 0 auto;">
-    <div class="card-header">Access</div>
+    <div class="card-header">Login</div>
     <div class="card-body">
         <form id="frmLogin" name="frmLogin" action="/login" method="POST">
             <div class="mb-3">
@@ -54,13 +78,13 @@
                 <label for="edPhone" class="form-label">Phone</label>
                 <input type="tel" class="form-control" id="edPhone" name="edPhone" placeholder="phone number..."/>
             </div>
-            <div class="d-flex justify-content-between">
-                <a href="#" onclick="document.frmLogin.submit()" class="btn btn-primary flex-grow-1 mx-1">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                <a href="#" onclick="document.frmLogin.submit()" class="btn btn-primary me-md-2" style="flex: 1;">
                     <img width="24px" src="/static/login.svg" title="login" />
                     &nbsp;
                     Login
                 </a>
-                <a href="#" onclick="document.frmLogin.action = '/user/add'; document.frmLogin.submit()" class="btn btn-primary flex-grow-1 mx-1">
+                <a href="#" onclick="document.frmLogin.action = '/user/add'; document.frmLogin.submit()" class="btn btn-primary" style="flex: 1;">
                     <img width="24px" src="/static/register.svg" title="register" />
                     &nbsp;
                     Register

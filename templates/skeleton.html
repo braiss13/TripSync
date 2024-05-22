@@ -23,7 +23,7 @@
             </div>
         </div>
 
-        <div style="margin-top: 20px;">
+        <div>
             {% set error_list = get_flashed_messages(with_categories=True) %}
             {% if error_list %}
                 {% for category, message in error_list %}
