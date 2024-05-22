@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-between align-items-center">
     <div>
         <b>{{ trip.origin }} to {{ trip.destination }}</b><br/>
-        <span>{{ trip.get_formatted_time() }} | Duration: {{ trip.duration }} mins | Fare: ${{ trip.fare }}</span><br/>
+        <span>{{ trip.get_formatted_time() }} | Duration: {{ trip.duration }} mins | Fare: {{ trip.fare }} €</span><br/>
         <span>Created by: {{ trip.user_id }}</span>
     </div>
     <div>

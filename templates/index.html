@@ -26,17 +26,33 @@
   </div>
 </div>
 {% else %}
-<div id="dvLogin" class="card" style="margin: 1000px; max-width: 1000px; margin: 0 auto;">
+<div id="dvLogin" class="card" style="margin: 10px; max-width: 1000px; margin: 0 auto;">
     <div class="card-header">Login</div>
     <div class="card-body">
         <form id="frmLogin" name="frmLogin" action="/login" method="POST">
             <div class="mb-3">
                 <label for="edEmail" class="form-label">Email</label>
-                <input type="text" class="form-control" id="edEmail" name="edEmail" placeholder="example@example2.format" />
+                <input type="text" class="form-control" id="edEmail" name="edEmail" placeholder="hello@example.format" />
             </div>
             <div class="mb-3">
                 <label for="edPswd" class="form-label">Password</label>
-                <input type="password" class="form-control" id="edPswd" name="edPswd" placeholder="Enter your password, (i promise not to tell anyone)"/>
+                <input type="password" class="form-control" id="edPswd" name="edPswd" placeholder="your pass..."/>
+            </div>
+            <div class="mb-3">
+                <label for="edName" class="form-label">Name</label>
+                <input type="text" class="form-control" id="edName" name="edName" placeholder="your name..."/>
+            </div>
+            <div class="mb-3">
+                <label for="edSurname" class="form-label">Surnames</label>
+                <input type="text" class="form-control" id="edSurname" name="edSurname" placeholder="your surnames ... (if you haven't already put your last name above)"/>
+            </div>
+            <div class="mb-3">
+                <label for="edAge" class="form-label">Age</label>
+                <input type="number" class="form-control" id="edAge" name="edAge" placeholder="your age..."/>
+            </div>
+            <div class="mb-3">
+                <label for="edPhone" class="form-label">Phone</label>
+                <input type="tel" class="form-control" id="edPhone" name="edPhone" placeholder="phone number..."/>
             </div>
             <div class="d-grid gap-2">
                 <a href="#" onclick="document.frmLogin.submit()" class="btn btn-primary">
@@ -54,4 +70,18 @@
     </div>
 </div>
 {% endif %}
+
+<div style="margin-top: 20px;">
+    {% set error_list = get_flashed_messages(with_categories=True) %}
+    {% if error_list %}
+        {% for category, message in error_list %}
+            <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show" role="alert" aria-label="error:">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
 {% endblock %}
+
