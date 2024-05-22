@@ -44,16 +44,16 @@ class Trip():
         self.__duration = value
 
     @property
-    def user_id(self):
-        return self.__user_id
-
-    @property
     def fare(self):
         return self.__fare
     
     @fare.setter
     def fare(self, value):
         self.__fare = value
+    
+    @property
+    def user_id(self):
+        return self.__user_id
 
     def get_safe_id(self, srp):
         return srp.safe_from_oid(self.__oid__)
