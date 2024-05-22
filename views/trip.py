@@ -41,7 +41,7 @@ def trip_add():
     
     usr = current_user
     min_date_time = datetime.now().strftime('%Y-%m-%dT%H:%M')
-    return flask.render_template("trip/add_trip.html", usr=usr, min_date_time=min_date_time, srp=srp)
+    return flask.render_template("add_trip.html", usr=usr, min_date_time=min_date_time, srp=srp)
 
 @trip_blpr.route("/edit/<trip_id>", methods=["GET", "POST"])
 @login_required
@@ -77,7 +77,7 @@ def trip_edit(trip_id):
     
     usr = current_user
     min_date_time = datetime.now().strftime('%Y-%m-%dT%H:%M')
-    return flask.render_template("trip/edit_trip.html", trip=trip, usr=usr, min_date_time=min_date_time, srp=srp)
+    return flask.render_template("edit_trip.html", trip=trip, usr=usr, min_date_time=min_date_time, srp=srp)
 
 @login_required
 @trip_blpr.route("/delete")
