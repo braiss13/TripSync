@@ -7,7 +7,7 @@ from model.Trip import Trip
 def get_blprint():
     usr_module = flask.blueprints.Blueprint("user_blpr", __name__,
                                             url_prefix="/user",
-                                            template_folder="templates",
+                                            template_folder="templates/user",
                                             static_folder="static")
     syrp = sirope.Sirope()
     return usr_module, syrp
@@ -46,3 +46,13 @@ def user_add():
     }
 
     return flask.render_template("index.html", **sust)
+
+@user_blpr.route("/profile/<user_id>")
+def user_profile(user_id):
+    usr = srp.find_first(User, lambda u: u.email == user_id)
+
+    if not usr:
+        flask.flash("User not found.", "danger")
+        return flask.redirect("/")
+
+    return flask.render_template("user_profile.html", user=usr)
