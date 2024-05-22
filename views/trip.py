@@ -1,7 +1,6 @@
 import flask
 import sirope
 from flask_login import login_required, current_user
-
 from model.Trip import Trip
 from datetime import datetime
 
@@ -42,35 +41,18 @@ def trip_add():
     
     usr = current_user
     min_date_time = datetime.now().strftime('%Y-%m-%dT%H:%M')
-    return flask.render_template("trip/add_trip.html", usr=usr, min_date_time=min_date_time)
-
-@trip_blpr.route("/list", methods=["GET"])
-@login_required
-def trip_list():
-    trips = list(srp.filter(Trip, lambda t: t.user_id == current_user.get_id()))
-    return flask.render_template("trip/list_trips.html", trips=trips)
+    return flask.render_template("trip/add_trip.html", usr=usr, min_date_time=min_date_time, srp=srp)
 
 @login_required
 @trip_blpr.route("/delete")
 def trip_delete():
-    trip_safe_id = flask.request.args.get("trip_id", " ").strip()
+    trip_safe_id = flask.request.args.get("trip_id", "").strip()
     trip_oid = srp.oid_from_safe(trip_safe_id)
     
     if srp.exists(trip_oid):
-        srp.delete (trip_oid)
-        
-        # Aquí habría que eliminar el score asociado al viaje también, lo gestionaremos en el futuro, se haría:
-        
-        """
-        scores = Score.find_by_trip (srp, trip_oid)
-        for score in scores:
-            srp.delete(score._id)
-        """
+        srp.delete(trip_oid)
         flask.flash("Trip deleted successfully.", "success")
-        #flask.flash("Trip and associated scores deleted")
     else:
         flask.flash("Trip not found.", "danger")
         
-    return flask.redirect("/trip/list")        
-        
-
+    return flask.redirect("/")

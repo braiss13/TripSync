@@ -75,7 +75,7 @@ def main():
     trip_list = []
 
     if usr:
-        trip_list = list(srp.filter(Trip, lambda t: t.user_id == usr.get_id()))
+        trip_list = list(srp.filter(Trip, lambda t: t.user_id == usr.email))
     
     sust = {
         "usr": usr,
@@ -84,7 +84,6 @@ def main():
     }
 
     return flask.render_template("index.html", **sust)
-
 
 if __name__ == "__main__":
     app.run(debug=True)

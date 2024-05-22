@@ -1,4 +1,6 @@
 import sirope
+from datetime import datetime
+
 
 class Trip():
     def __init__(self, time, origin, destination, duration, fare, user_id):
@@ -35,3 +37,7 @@ class Trip():
     
     def get_safe_id(self, srp):
         return srp.safe_from_oid(self.__oid__)
+
+    def get_formatted_time(self):
+        dt = datetime.strptime(self.__time, '%Y-%m-%dT%H:%M')
+        return dt.strftime('%d-%m-%Y %H:%M')
