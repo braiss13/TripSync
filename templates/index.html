@@ -26,17 +26,17 @@
   </div>
 </div>
 {% else %}
-<div id="dvLogin" class="card" style="margin: 10px">
+<div id="dvLogin" class="card" style="margin: 1000px; max-width: 1000px; margin: 0 auto;">
     <div class="card-header">Login</div>
     <div class="card-body">
         <form id="frmLogin" name="frmLogin" action="/login" method="POST">
             <div class="mb-3">
                 <label for="edEmail" class="form-label">Email</label>
-                <input type="text" class="form-control" id="edEmail" name="edEmail" placeholder="email..." />
+                <input type="text" class="form-control" id="edEmail" name="edEmail" placeholder="example@example2.format" />
             </div>
             <div class="mb-3">
                 <label for="edPswd" class="form-label">Password</label>
-                <input type="password" class="form-control" id="edPswd" name="edPswd" />
+                <input type="password" class="form-control" id="edPswd" name="edPswd" placeholder="Enter your password, (i promise not to tell anyone)"/>
             </div>
             <div class="d-grid gap-2">
                 <a href="#" onclick="document.frmLogin.submit()" class="btn btn-primary">
