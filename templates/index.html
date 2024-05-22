@@ -3,7 +3,7 @@
 {% block contents %}
 {% if usr %}
 <div class="card" id="dvTrips" style="margin: 10px">
-  <div class="card-header">My Trips</div>
+  <div class="card-header">My Trips - {{ usr.name }} {{ usr.surname }}</div>
   <div class="card-body">
       {% if my_trip_list %}
           <ul class="list-group list-group-flush list-group-numbered">
@@ -51,7 +51,7 @@
 
 {% else %}
 <div id="dvLogin" class="card" style="margin: 10px; max-width: 1000px; margin: 0 auto;">
-    <div class="card-header">Login</div>
+    <div class="card-header">Access</div>
     <div class="card-body">
         <form id="frmLogin" name="frmLogin" action="/login" method="POST">
             <div class="mb-3">
@@ -68,7 +68,7 @@
             </div>
             <div class="mb-3">
                 <label for="edSurname" class="form-label">Surnames</label>
-                <input type="text" class="form-control" id="edSurname" name="edSurname" placeholder="your surnames ... (if you haven't already put your last name above)"/>
+                <input type="text" class="form-control" id="edSurname" name="edSurname" placeholder="your surnames..."/>
             </div>
             <div class="mb-3">
                 <label for="edAge" class="form-label">Age</label>

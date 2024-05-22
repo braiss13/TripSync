@@ -2,9 +2,10 @@
     <div>
         <b>{{ trip.origin }} to {{ trip.destination }}</b><br/>
         <span>{{ trip.get_formatted_time() }} | Duration: {{ trip.duration }} mins | Fare: {{ trip.fare }} €</span><br/>
-        <span>Created by: <a href="{{ url_for('user_blpr.user_profile', user_id=trip.user_id) }}">{{ creator_name }}</a></span>
+        <span>Created by: <a href="{{ url_for('user_blpr.user_profile', user_id=trip.user_id) }}">{{ usr.name }} {{ usr.surname }}</a></span>
     </div>
     <div>
+        {% if trip.user_id == usr.email %}
         <a href="{{ url_for('trip_blpr.trip_edit', trip_id=trip.get_safe_id(srp)) }}" class="btn btn-warning btn-sm">
             Edit
         </a>
@@ -14,5 +15,6 @@
                 Delete
             </button>
         </form>
+        {% endif %}
     </div>
 </div>

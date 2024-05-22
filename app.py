@@ -74,17 +74,10 @@ def main():
     usr = User.current()
     my_trip_list = []
     other_trip_list = []
-    trips_with_creators = []
 
     if usr:
-        all_trips = list(srp.load_all(Trip))
-        for trip in all_trips:
-            creator = User.find(srp, trip.user_id)
-            creator_name = f"{creator.name} {creator.surname}" if creator else "Unknown"
-            if trip.user_id == usr.email:
-                my_trip_list.append((trip, creator_name))
-            else:
-                other_trip_list.append((trip, creator_name))
+        my_trip_list = [(trip, usr.name + ' ' + usr.surname) for trip in srp.filter(Trip, lambda t: t.user_id == usr.email)]
+        other_trip_list = [(trip, User.find(srp, trip.user_id).name + ' ' + User.find(srp, trip.user_id).surname) for trip in srp.filter(Trip, lambda t: t.user_id != usr.email)]
 
     sust = {
         "usr": usr,
@@ -94,6 +87,8 @@ def main():
     }
 
     return flask.render_template("index.html", **sust)
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
