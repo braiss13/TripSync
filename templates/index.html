@@ -27,7 +27,7 @@
 </div>
 {% else %}
 <div id="dvLogin" class="card" style="margin: 10px; max-width: 1000px; margin: 0 auto;">
-    <div class="card-header">Login</div>
+    <div class="card-header">Login / Register</div>
     <div class="card-body">
         <form id="frmLogin" name="frmLogin" action="/login" method="POST">
             <div class="mb-3">
@@ -54,13 +54,13 @@
                 <label for="edPhone" class="form-label">Phone</label>
                 <input type="tel" class="form-control" id="edPhone" name="edPhone" placeholder="phone number..."/>
             </div>
-            <div class="d-grid gap-2">
-                <a href="#" onclick="document.frmLogin.submit()" class="btn btn-primary">
+            <div class="d-flex justify-content-between">
+                <a href="#" onclick="document.frmLogin.submit()" class="btn btn-primary flex-grow-1 mx-1">
                     <img width="24px" src="/static/login.svg" title="login" />
                     &nbsp;
                     Login
                 </a>
-                <a href="#" onclick="document.frmLogin.action = '/user/add'; document.frmLogin.submit()" class="btn btn-primary">
+                <a href="#" onclick="document.frmLogin.action = '/user/add'; document.frmLogin.submit()" class="btn btn-primary flex-grow-1 mx-1">
                     <img width="24px" src="/static/register.svg" title="register" />
                     &nbsp;
                     Register
@@ -84,4 +84,3 @@
 </div>
 
 {% endblock %}
-
