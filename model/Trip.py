@@ -1,7 +1,6 @@
 import sirope
 from datetime import datetime
 
-
 class Trip():
     def __init__(self, time, origin, destination, duration, fare, user_id):
         self.__time = time
