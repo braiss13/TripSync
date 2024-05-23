@@ -5,6 +5,7 @@ from model.Score import Score
 from model.User import User
 from model.Trip import Trip
 
+
 def get_blprint():
     score_module = flask.blueprints.Blueprint("score_blpr", __name__,
                                               url_prefix="/score",
@@ -13,7 +14,9 @@ def get_blprint():
     srp = sirope.Sirope()
     return score_module, srp
 
+
 score_blpr, srp = get_blprint()
+
 
 @score_blpr.route("/add", methods=["GET", "POST"])
 @login_required
@@ -22,8 +25,9 @@ def score_add():
         trip_id = flask.request.form.get("edTripId", "").strip()
         user_id = flask.request.form.get("edUserId", "").strip()
         rating = flask.request.form.get("edRating", "").strip()
+        comment = flask.request.form.get("edComment", "").strip()
 
-        if (not trip_id or not user_id or not rating):
+        if not trip_id or not user_id or not rating:
             flask.flash("All fields are required.")
             return flask.redirect("/score/add")
 
@@ -42,15 +46,32 @@ def score_add():
             flask.flash("Invalid Trip ID or User ID.")
             return flask.redirect("/score/add")
 
-        score = Score(trip_id, user_id, rating)
+        score = Score(trip_id, user_id, rating, comment)
         srp.save(score)
         flask.flash("Score added successfully.")
         return flask.redirect("/")
-    
+
     return flask.render_template("score/add_score.html")
 
-@score_blpr.route("/list", methods=["GET"])
+    """
+    @login_required
+    @score_blpr.route("/list", methods=["GET"])
+    def score_list():
+        scores = srp.filter(Score, lambda s: s.user_id == current_user.email)
+        return flask.render_template("score/list_scores.html", scores=scores)
+    """
+
+
 @login_required
-def score_list():
-    scores = srp.filter(Score, lambda s: s.user_id == current_user.id)
-    return flask.render_template("score/list_scores.html", scores=scores)
+@score_blpr.route("/delete")
+def score_delete():
+    score_safe_id = flask.request.args.get("score_id", "").strip()
+    score_oid = srp.oid_from_safe(score_safe_id)
+
+    if srp.exists(score_oid):
+        srp.delete(score_oid)
+        flask.flash("Score deleted successfully.", "success")
+    else:
+        flask.flash("Score not found.", "danger")
+
+    return flask.redirect("/")

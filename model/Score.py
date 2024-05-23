@@ -1,11 +1,13 @@
 import sirope
 from datetime import datetime
 
+
 class Score():
-    def __init__(self, trip_id, user_id, rating, date=None):
+    def __init__(self, trip_id, user_id, rating, comment="", date=None):
         self.__trip_id = trip_id
         self.__user_id = user_id
         self.__rating = rating
+        self.__comment = comment
         self.__date = date if date else datetime.now()
 
     @property
@@ -19,6 +21,10 @@ class Score():
     @property
     def rating(self):
         return self.__rating
+
+    @property
+    def comment(self):
+        return self.__comment
 
     @property
     def date(self):
