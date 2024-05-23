@@ -35,7 +35,7 @@ def user_add():
     srp.save(usr)
     flask_login.login_user(usr)
     flask.flash("Registration successful! You are now logged in.", "success")
-
+    """
     # Obtener la lista de viajes para el usuario recién registrado
     trip_list = list(srp.filter(Trip, lambda t: t.user_id == usr.email))
     
@@ -46,6 +46,8 @@ def user_add():
     }
 
     return flask.render_template("index.html", **sust)
+    """
+    return flask.redirect("/")
 
 @user_blpr.route("/profile/<user_id>")
 def user_profile(user_id):

@@ -88,9 +88,6 @@ def main():
 
     return flask.render_template("index.html", **sust)
 
-
-
-
 if __name__ == "__main__":
     app.run(debug=True)
 
