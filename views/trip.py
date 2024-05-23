@@ -11,7 +11,7 @@ def get_blprint():
                                              static_folder="static")
     srp = sirope.Sirope()
     return trip_module, srp
-
+ 
 trip_blpr, srp = get_blprint()
 
 @trip_blpr.route("/add", methods=["GET", "POST"])
