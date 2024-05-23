@@ -98,8 +98,10 @@ def trip_delete():
 def trip_join(trip_id):
     trip_oid = srp.oid_from_safe(trip_id)
     trip = srp.load(trip_oid)
+    
+    usr = current_user
 
-    if not trip.is_participant(current_user) and len(trip.participants) < 4:
+    if usr.email not in trip.participants and len(trip.participants) < 4:
         trip.add_participant(current_user.email)
         srp.save(trip)
         flask.flash("You have successfully joined the trip.", "success")

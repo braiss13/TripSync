@@ -50,12 +50,3 @@ class User(flask_login.mixins.UserMixin):
     @staticmethod
     def find(srp: sirope.Sirope, email: str) -> "User":
         return srp.find_first(User, lambda u: u.email == email)
-    
-    def to_dict(self):
-        return {
-            "email": self.__email,
-            "name": self.__name,
-            "surname": self.__surname,
-            "age": self.__age,
-            "phone": self.__phone
-        }

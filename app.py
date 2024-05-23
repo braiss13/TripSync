@@ -77,7 +77,14 @@ def main():
 
     if usr:
         my_trip_list = [(trip, usr.name + ' ' + usr.surname) for trip in srp.filter(Trip, lambda t: t.user_id == usr.email)]
-        other_trip_list = [(trip, User.find(srp, trip.user_id).name + ' ' + User.find(srp, trip.user_id).surname) for trip in srp.filter(Trip, lambda t: t.user_id != usr.email)]
+        other_trip_list = [
+            (
+                trip,
+                User.find(srp, trip.user_id).name + ' ' + User.find(srp, trip.user_id).surname,
+                [User.find(srp, p).name + ' ' + User.find(srp, p).surname for p in trip.participants]
+            )
+            for trip in srp.filter(Trip, lambda t: t.user_id != usr.email)
+        ]
 
     sust = {
         "usr": usr,
@@ -87,6 +94,7 @@ def main():
     }
 
     return flask.render_template("index.html", **sust)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

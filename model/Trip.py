@@ -16,12 +16,12 @@ class Trip():
     def participants(self):
         return self.__participants
 
-    def add_participant(self, user):
-        if len(self.__participants) < 4:
-            self.__participants.append(user)
+    def add_participant(self, participant_email):
+        if participant_email not in self.__participants:
+            self.__participants.append(participant_email)
 
     def is_participant(self, user):
-        return user.email in [p.email for p in self.__participants]
+        return user.email in self.__participants
 
     @property
     def time(self):

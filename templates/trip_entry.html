@@ -7,9 +7,8 @@
         <div>
             <span>Participants: 
                 {% if trip.participants %}
-                    {% for participant_email in trip.participants %}
-                        {% set participant = srp.find_first(User, lambda u: u.email == participant_email) %}
-                        <a href="{{ url_for('user_blpr.user_profile', user_id=participant.email) }}">{{ participant.name }} {{ participant.surname }}</a>{% if not loop.last %}, {% endif %}
+                    {% for participant in trip.participants %}
+                        <a href="{{ url_for('user_blpr.user_profile', user_id=participant) }}">{{ participant }}</a>{% if not loop.last %}, {% endif %}
                     {% endfor %}
                 {% else %}
                     No participants yet.
