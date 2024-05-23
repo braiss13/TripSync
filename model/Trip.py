@@ -10,6 +10,18 @@ class Trip():
         self.__duration = duration
         self.__fare = fare
         self.__user_id = user_id
+        self.__participants = []
+
+    @property
+    def participants(self):
+        return self.__participants
+
+    def add_participant(self, user):
+        if len(self.__participants) < 4:
+            self.__participants.append(user)
+
+    def is_participant(self, user):
+        return user.email in [p.email for p in self.__participants]
 
     @property
     def time(self):
@@ -54,6 +66,10 @@ class Trip():
     @property
     def user_id(self):
         return self.__user_id
+    
+    @property
+    def participants(self):
+        return self.__participants
 
     def get_safe_id(self, srp):
         return srp.safe_from_oid(self.__oid__)
@@ -61,3 +77,4 @@ class Trip():
     def get_formatted_time(self):
         dt = datetime.strptime(self.__time, '%Y-%m-%dT%H:%M')
         return dt.strftime('%d-%m-%Y %H:%M')
+    
