@@ -98,24 +98,12 @@ def trip_delete():
 def trip_join(trip_id):
     trip_oid = srp.oid_from_safe(trip_id)
     trip = srp.load(trip_oid)
-    usr = current_user
 
-    if not trip.is_participant(usr) and len(trip.participants) < 4:
-        trip.add_participant(usr)
+    if not trip.is_participant(current_user) and len(trip.participants) < 4:
+        trip.add_participant(current_user.email)
         srp.save(trip)
         flask.flash("You have successfully joined the trip.", "success")
     else:
-        flask.flash("You are already a participant or the trip is full.", "danger")
-
+        flask.flash("Unable to join the trip. Either you are already a participant or the trip is full.", "danger")
+        
     return flask.redirect("/")
-
-@trip_blpr.route("/<trip_id>", methods=["GET"])
-def trip_view(trip_id):
-    trip_oid = srp.oid_from_safe(trip_id)
-    trip = srp.load(trip_oid)
-    if trip:
-        return flask.render_template("trip_entry.html", trip=trip)
-    flask.flash("Trip not found.", "danger")
-    return flask.redirect("/")
-
-

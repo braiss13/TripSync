@@ -2,12 +2,13 @@
     <div>
         <b>{{ trip.origin }} to {{ trip.destination }}</b><br/>
         <span>{{ trip.get_formatted_time() }} | Duration: {{ trip.duration }} mins | Fare: {{ trip.fare }} €</span><br/>
-        <span>Created by: <a href="{{ url_for('user_blpr.user_profile', user_id=trip.user_id) }}">{{ usr.name }} {{ usr.surname }}</a></span>
+        <span>Created by: <a href="{{ url_for('user_blpr.user_profile', user_id=trip.user_id) }}">{{ creator_name }}</a></span>
 
         <div>
             <span>Participants: 
                 {% if trip.participants %}
-                    {% for participant in trip.participants %}
+                    {% for participant_email in trip.participants %}
+                        {% set participant = srp.find_first(User, lambda u: u.email == participant_email) %}
                         <a href="{{ url_for('user_blpr.user_profile', user_id=participant.email) }}">{{ participant.name }} {{ participant.surname }}</a>{% if not loop.last %}, {% endif %}
                     {% endfor %}
                 {% else %}
@@ -15,7 +16,7 @@
                 {% endif %}
             </span>
         </div>
-        {% if not trip.is_participant(usr) and usr.email != trip.user_id and len(trip.participants) < 4 %}
+        {% if usr.email != trip.user_id %}
         <form method="post" action="{{ url_for('trip_blpr.trip_join', trip_id=trip.get_safe_id(srp)) }}" style="display:inline;">
             <button type="submit" class="btn btn-primary btn-sm">
                 Join

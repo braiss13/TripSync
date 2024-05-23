@@ -1,5 +1,0 @@
-flask
-flask-login
-jinja2
-sirope
-
