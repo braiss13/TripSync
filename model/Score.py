@@ -29,3 +29,6 @@ class Score():
     @property
     def date(self):
         return self.__date
+    
+    def get_safe_id(self, srp):
+        return srp.safe_from_oid(self.__oid__)

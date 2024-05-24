@@ -5,7 +5,8 @@
         <span>Created by: <a href="{{ url_for('user_blpr.user_profile', user_id=trip.user_id) }}">{{ creator_name }}</a></span>
 
         <div>
-            <span>Participants: 
+            <br>
+            <span><i>Participants</i>: 
                 {% if trip.participants %}
                     {% for participant in trip.participants %}
                         <a href="{{ url_for('user_blpr.user_profile', user_id=participant) }}">{{ participant }}</a>{% if not loop.last %}, {% endif %}
@@ -15,6 +16,28 @@
                 {% endif %}
             </span>
         </div>
+        
+        <div>
+            <br>
+            <span><u>Scores</u>: 
+                {% if trip.scores %}
+                    {% for score in trip.scores %}
+                        {% set sc = srp.load(srp.oid_from_safe(score)) %}
+                        <div>
+                            <b>User:</b> <a href="{{ url_for('user_blpr.user_profile', user_id=sc.user_id) }}">{{ sc.user_id }}</a><br/>
+                            <b>Rating:</b> {{ sc.rating }}<br/>
+                            <b>Comment:</b> {{ sc.comment }}<br/>
+                            <b>Date:</b> {{ sc.date }}
+                            
+                        </div>
+                        <br>
+                    {% endfor %}
+                {% else %}
+                    No scores yet.
+                {% endif %}
+            </span>
+        </div>
+
         {% if usr.email != trip.user_id %}
         <form method="post" action="{{ url_for('trip_blpr.trip_join', trip_id=trip.get_safe_id(srp)) }}" style="display:inline;">
             <button type="submit" class="btn btn-primary btn-sm">
@@ -23,6 +46,13 @@
         </form>
         {% endif %}
 
+        {% if usr.email in trip.participants %}
+        <form method="post" action="{{ url_for('score_blpr.score_add', trip_id=trip.get_safe_id(srp)) }}" style="display:inline;">
+            <button type="submit" class="btn btn-secondary btn-sm">
+                Add Score
+            </button>
+        </form>
+        {% endif %}
     </div>
     <div>
         {% if trip.user_id == usr.email %}

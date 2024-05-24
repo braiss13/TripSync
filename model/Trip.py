@@ -10,17 +10,7 @@ class Trip():
         self.__fare = fare
         self.__user_id = user_id
         self.__participants = []
-
-    @property
-    def participants(self):
-        return self.__participants
-
-    def add_participant(self, participant_email):
-        if participant_email not in self.__participants:
-            self.__participants.append(participant_email)
-
-    def is_participant(self, user):
-        return user.email in self.__participants
+        self.__scores = []
 
     @property
     def time(self):
@@ -70,6 +60,21 @@ class Trip():
     def participants(self):
         return self.__participants
 
+    def add_participant(self, participant_email):
+        if participant_email not in self.__participants:
+            self.__participants.append(participant_email)
+
+    def is_participant(self, user):
+        return user.email in self.__participants
+    
+    @property
+    def scores(self):
+        return self.__scores
+    
+    def add_score(self, score_id):
+        if score_id not in self.__scores:
+            self.__scores.append(score_id)
+    
     def get_safe_id(self, srp):
         return srp.safe_from_oid(self.__oid__)
 

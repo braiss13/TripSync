@@ -1,5 +1,6 @@
 import flask
 import sirope
+
 from flask_login import login_required, current_user
 from model.Trip import Trip
 from datetime import datetime
