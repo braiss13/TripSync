@@ -82,3 +82,15 @@ class Trip():
         dt = datetime.strptime(self.__time, '%Y-%m-%dT%H:%M')
         return dt.strftime('%d-%m-%Y %H:%M')
     
+    def to_dict(self):
+        return {
+            "time": self.__time,
+            "origin": self.__origin,
+            "destination": self.__destination,
+            "duration": self.__duration,
+            "fare": self.__fare,
+            "user_id": self.__user_id,
+            "participants": self.__participants,
+            "scores": self.__scores
+        }
+    

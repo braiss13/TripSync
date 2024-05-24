@@ -20,18 +20,26 @@
         <div>
             <br>
             <span><u>Scores</u>: 
-                {% if trip.scores %}
-                    {% for score in trip.scores %}
-                        {% set sc = srp.load(srp.oid_from_safe(score)) %}
-                        <div>
-                            <b>User:</b> <a href="{{ url_for('user_blpr.user_profile', user_id=sc.user_id) }}">{{ sc.user_id }}</a><br/>
-                            <b>Rating:</b> {{ sc.rating }}<br/>
-                            <b>Comment:</b> {{ sc.comment }}<br/>
-                            <b>Date:</b> {{ sc.date }}
-                            
-                        </div>
-                        <br>
-                    {% endfor %}
+                {% if scores %}
+                {% for score in scores %}
+                <div>
+                    <b>User:</b> <a href="{{ url_for('user_blpr.user_profile', user_id=score['user_id']['email']) }}">{{ score['user_id']['name'] }}</a><br/>
+                    <b>Rating:</b>
+                    <span class="stars">
+                        {% for i in range(1, 6) %}
+                            {% if i <= score['rating'] %}
+                                <i class="fas fa-star filled"></i>
+                            {% else %}
+                                <i class="fas fa-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </span><br/>
+                    <b>Comment:</b> {{ score['comment'] }}<br/>
+                    <b>Date:</b> {{ score['date'] }}
+                </div>
+                <br>
+            {% endfor %}
+            
                 {% else %}
                     No scores yet.
                 {% endif %}
@@ -68,3 +76,13 @@
         {% endif %}
     </div>
 </div>
+
+<style>
+    .stars .fa-star {
+        color: transparent;
+        -webkit-text-stroke: 1px #FFD700;
+    }
+    .stars .fa-star.filled {
+        color: #FFD700;
+    }
+</style>

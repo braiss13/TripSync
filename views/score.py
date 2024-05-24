@@ -1,8 +1,9 @@
 import flask
 import sirope
 from flask_login import login_required, current_user
-
 from model.Score import Score
+from model.User import User
+from model.Trip import Trip
 
 def get_blprint():
     score_module = flask.blueprints.Blueprint("score_blpr", __name__,
@@ -22,7 +23,9 @@ def score_add(trip_id):
         comment = flask.request.form.get("edComment", "").strip()
 
         trip = srp.load(srp.oid_from_safe(trip_id))
-        
+        user = current_user.to_dict()
+        trip_data = trip.to_dict()
+
         if not rating:
             flask.flash("Rating is required.", "danger")
             return flask.redirect(f"/score/add/{trip_id}")
@@ -35,7 +38,7 @@ def score_add(trip_id):
             flask.flash("Rating must be an integer between 1 and 5.", "danger")
             return flask.redirect(f"/score/add/{trip_id}")
         
-        score = Score(trip_id, current_user.email, rating, comment)
+        score = Score(trip_data, user, rating, comment)
         srp.save(score)
         trip.add_score(score.get_safe_id(srp))
         srp.save(trip)

@@ -31,7 +31,7 @@
   <div class="card-body">
       {% if other_trip_list %}
           <ul class="list-group list-group-flush list-group-numbered">
-          {% for trip, creator_name, participants in other_trip_list %}
+            {% for trip, creator_name, participants, scores in other_trip_list %}
               <li class="list-group-item">
                   {% include "trip_entry.html" %}
               </li>
