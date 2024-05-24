@@ -1,14 +1,14 @@
 <div class="d-flex justify-content-between align-items-center">
     <div>
-        <b>{{ trip.origin }} to {{ trip.destination }}</b><br/>
-        <span>{{ trip.get_formatted_time() }} | Duration: {{ trip.duration }} mins | Fare: {{ trip.fare }} €</span><br/>
-        <span>Created by: <a href="{{ url_for('user_blpr.user_profile', user_id=trip.user_id) }}">{{ creator_name }}</a></span>
+        <b>{{ trip['origin'] }} to {{ trip['destination'] }}</b><br/>
+        <span>{{ trip['time'] }} | Duration: {{ trip['duration'] }} mins | Fare: {{ trip['fare'] }} €</span><br/>
+        <span>Created by: <a href="{{ url_for('user_blpr.user_profile', user_id=trip['user_id']) }}">{{ creator_name }}</a></span>
 
         <div>
             <br>
             <span><i>Participants</i>: 
-                {% if trip.participants %}
-                    {% for participant in trip.participants %}
+                {% if trip['participants'] %}
+                    {% for participant in trip['participants'] %}
                         <a href="{{ url_for('user_blpr.user_profile', user_id=participant) }}">{{ participant }}</a>{% if not loop.last %}, {% endif %}
                     {% endfor %}
                 {% else %}
@@ -21,41 +21,37 @@
             <br>
             <span><u>Scores</u>: 
                 {% if scores %}
-                {% for score in scores %}
-                <div>
-                    <b>User:</b> <a href="{{ url_for('user_blpr.user_profile', user_id=score['user_id']['email']) }}">{{ score['user_id']['name'] }}</a><br/>
-                    <b>Rating:</b>
-                    <span class="stars">
-                        {% for i in range(1, 6) %}
-                            {% if i <= score['rating'] %}
-                                <i class="fas fa-star filled"></i>
-                            {% else %}
-                                <i class="fas fa-star"></i>
-                            {% endif %}
-                        {% endfor %}
-                    </span><br/>
-                    <b>Comment:</b> {{ score['comment'] }}<br/>
-                    <b>Date:</b> {{ score['date'] }}
-                </div>
-                <br>
-            {% endfor %}
-            
+                    {% for score in scores %}
+                        {% if score.get("error") %}
+                            I like cheese.
+                            <b>{{ score.error }}</b><br/>
+                        {% else %}
+                            <div>
+                                <b>Rating:</b>&nbsp;<span style="font-size: 120%">{{ score['rating'] }}</span><br/>
+                                <b>Comment:</b>&nbsp;<span style="font-size: 120%">{{ score['comment'] }}</span><br/>
+                                <b>Trip:</b>&nbsp;<span style="font-size: 120%">{{ score['trip']['origin'] }} to {{ score['trip']['destination'] }}</span><br/>
+                                <b>Date:</b>&nbsp;<span style="font-size: 120%">{{ score['date'] }}</span><br/>
+                                <b>User:</b>&nbsp;<span style="font-size: 120%">{{ score['user']['name'] }} {{ score['user']['surname'] }}</span><br/>
+                            </div>
+                            <br/>
+                        {% endif %}
+                    {% endfor %}
                 {% else %}
                     No scores yet.
                 {% endif %}
             </span>
         </div>
 
-        {% if usr.email != trip.user_id %}
-        <form method="post" action="{{ url_for('trip_blpr.trip_join', trip_id=trip.get_safe_id(srp)) }}" style="display:inline;">
+        {% if usr['email'] != trip['user_id'] %}
+        <form method="post" action="{{ url_for('trip_blpr.trip_join', trip_id=trip['id']) }}" style="display:inline;">
             <button type="submit" class="btn btn-primary btn-sm">
                 Join
             </button>
         </form>
         {% endif %}
 
-        {% if usr.email in trip.participants %}
-        <form method="post" action="{{ url_for('score_blpr.score_add', trip_id=trip.get_safe_id(srp)) }}" style="display:inline;">
+        {% if usr['email'] in trip['participants'] %}
+        <form method="post" action="{{ url_for('score_blpr.score_add', trip_id=trip['id']) }}" style="display:inline;">
             <button type="submit" class="btn btn-secondary btn-sm">
                 Add Score
             </button>
@@ -63,12 +59,12 @@
         {% endif %}
     </div>
     <div>
-        {% if trip.user_id == usr.email %}
-        <a href="{{ url_for('trip_blpr.trip_edit', trip_id=trip.get_safe_id(srp)) }}" class="btn btn-warning btn-sm">
+        {% if trip['user_id'] == usr['email'] %}
+        <a href="{{ url_for('trip_blpr.trip_edit', trip_id=trip['id']) }}" class="btn btn-warning btn-sm">
             Edit
         </a>
         <form method="get" action="{{ url_for('trip_blpr.trip_delete') }}" style="display:inline;">
-            <input type="hidden" name="trip_id" value="{{ trip.get_safe_id(srp) }}">
+            <input type="hidden" name="trip_id" value="{{ trip['id'] }}">
             <button type="submit" class="btn btn-danger btn-sm">
                 Delete
             </button>
@@ -76,13 +72,3 @@
         {% endif %}
     </div>
 </div>
-
-<style>
-    .stars .fa-star {
-        color: transparent;
-        -webkit-text-stroke: 1px #FFD700;
-    }
-    .stars .fa-star.filled {
-        color: #FFD700;
-    }
-</style>

@@ -1,7 +1,11 @@
 <div>
-    <b>Rating:</b>&nbsp;<span style="font-size: 120%">{{ score.rating }}</span><br/>
-    <b>Comment:</b>&nbsp;<span style="font-size: 120%">{{ score.comment }}</span><br/>
-    <b>Trip ID:</b>&nbsp;<span style="font-size: 120%">{{ score.trip_id }}</span><br/>
-    <b>Date:</b>&nbsp;<span style="font-size: 120%">{{ score.date }}</span><br/>
-    <b>User ID:</b>&nbsp;<span style="font-size: 120%">{{ score.user_id }}</span><br/>
+    {% if score.get("error") %}
+        <b>{{ score.error }}</b><br/>
+    {% else %}
+        <b>Rating:</b>&nbsp;<span style="font-size: 120%">{{ score['rating'] }}</span><br/>
+        <b>Comment:</b>&nbsp;<span style="font-size: 120%">{{ score['comment'] }}</span><br/>
+        <b>Trip:</b>&nbsp;<span style="font-size: 120%">{{ score['trip']['origin'] }} to {{ score['trip']['destination'] }}</span><br/>
+        <b>Date:</b>&nbsp;<span style="font-size: 120%">{{ score['date'] }}</span><br/>
+        <b>User:</b>&nbsp;<span style="font-size: 120%">{{ score['user']['name'] }} {{ score['user']['surname'] }}</span><br/>
+    {% endif %}
 </div>

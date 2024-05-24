@@ -76,33 +76,37 @@ def main():
     other_trip_list = []
 
     if usr:
-        my_trip_list = [(trip, usr.name + ' ' + usr.surname) for trip in srp.filter(Trip, lambda t: t.user_id == usr.email)]
+        my_trip_list = [(trip.to_dict(), f"{usr.name} {usr.surname}") for trip in srp.filter(Trip, lambda t: t.user_id == usr.email)]
+        
         other_trip_list = []
         for trip in srp.filter(Trip, lambda t: t.user_id != usr.email):
+            creator = User.find(srp, trip.user_id)
+            creator_name = f"{creator.name} {creator.surname}"
+            participants = [f"{User.find(srp, p).name} {User.find(srp, p).surname}" for p in trip.participants]
+
             scores = []
             for score_id in trip.scores:
                 try:
                     score = srp.load(srp.oid_from_safe(score_id))
-                    scores.append(score.to_dict())
+                    if score is not None and isinstance(score, Score):
+                        scores.append(score.to_dict())
+                    else:
+                        scores.append({"error": f"Error loading score details: {score_id}"})
                 except Exception as e:
                     print(f"Error loading score {score_id}: {e}")
-            other_trip_list.append(
-                (
-                    trip,
-                    User.find(srp, trip.user_id).name + ' ' + User.find(srp, trip.user_id).surname,
-                    [User.find(srp, p).name + ' ' + User.find(srp, p).surname for p in trip.participants],
-                    scores
-                )
-            )
+                    scores.append({"error": f"Error loading score details: {score_id}"})
+
+            other_trip_list.append((trip.to_dict(), creator_name, participants, scores))
 
     sust = {
-        "usr": usr,
+        "usr": usr.to_dict() if usr else None,
         "srp": srp,
         "my_trip_list": my_trip_list,
         "other_trip_list": other_trip_list
     }
 
     return flask.render_template("index.html", **sust)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

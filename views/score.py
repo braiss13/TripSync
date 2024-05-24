@@ -18,9 +18,12 @@ score_blpr, srp = get_blprint()
 @score_blpr.route("/add/<trip_id>", methods=["GET", "POST"])
 @login_required
 def score_add(trip_id):
+    flask.redirect(f"/score/add/{trip_id}")
     if flask.request.method == "POST":
         rating = flask.request.form.get("edRating", "").strip()
         comment = flask.request.form.get("edComment", "").strip()
+        # print(f"Debug: rating = {rating}")
+        # print(f"Debug: comment = {comment}")
 
         trip = srp.load(srp.oid_from_safe(trip_id))
         user = current_user.to_dict()
@@ -37,7 +40,7 @@ def score_add(trip_id):
         except ValueError:
             flask.flash("Rating must be an integer between 1 and 5.", "danger")
             return flask.redirect(f"/score/add/{trip_id}")
-        
+            
         score = Score(trip_data, user, rating, comment)
         srp.save(score)
         trip.add_score(score.get_safe_id(srp))

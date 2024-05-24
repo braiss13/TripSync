@@ -93,4 +93,3 @@ class Trip():
             "participants": self.__participants,
             "scores": self.__scores
         }
-    
