@@ -81,18 +81,29 @@ def trip_edit(trip_id):
     return flask.render_template("edit_trip.html", trip=trip, usr=usr, min_date_time=min_date_time, srp=srp)
 
 @login_required
-@trip_blpr.route("/delete")
+@trip_blpr.route('delete', methods=['POST'])
 def trip_delete():
-    trip_safe_id = flask.request.args.get("trip_id", "").strip()
-    trip_oid = srp.oid_from_safe(trip_safe_id)
+    trip_id = flask.request.form.get("trip_id")
+    
+    if not trip_id:
+        flask.flash("Trip ID is missing.", "danger")
+        return flask.redirect("/")
+    
+    trip_oid = srp.oid_from_safe(trip_id)
+    
+    if not trip_oid:
+        flask.flash("Invalid Trip ID.", "danger")
+        return flask.redirect("/")
     
     if srp.exists(trip_oid):
-        srp.delete(trip_oid)
+        trip = srp.load(trip_oid)
+        srp.delete(trip)
         flask.flash("Trip deleted successfully.", "success")
     else:
         flask.flash("Trip not found.", "danger")
-        
+    
     return flask.redirect("/")
+
 
 @login_required
 @trip_blpr.route("/join/<trip_id>", methods=["POST"])

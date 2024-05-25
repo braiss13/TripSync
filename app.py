@@ -3,6 +3,8 @@ import flask
 import flask_login
 import sirope
 
+from flask_login import current_user
+
 from model.User import User
 from model.Trip import Trip
 from model.Score import Score
@@ -78,28 +80,20 @@ def main():
     if usr:
         my_trip_list = [(trip.to_dict(), f"{usr.name} {usr.surname}") for trip in srp.filter(Trip, lambda t: t.user_id == usr.email)]
         
-        other_trip_list = []
         for trip in srp.filter(Trip, lambda t: t.user_id != usr.email):
             creator = User.find(srp, trip.user_id)
             creator_name = f"{creator.name} {creator.surname}"
             participants = [f"{User.find(srp, p).name} {User.find(srp, p).surname}" for p in trip.participants]
 
-            scores = []
-            for score_id in trip.scores:
-                try:
-                    score = srp.load(srp.oid_from_safe(score_id))
-                    if score is not None and isinstance(score, Score):
-                        scores.append(score.to_dict())
-                    else:
-                        scores.append({"error": f"Error loading score details: {score_id}"})
-                except Exception as e:
-                    print(f"Error loading score {score_id}: {e}")
-                    scores.append({"error": f"Error loading score details: {score_id}"})
+            score_list = srp.load_all(Score)    
+            
+            trip_dict = trip.to_dict()
+            trip_dict['safe_id'] = trip.get_safe_id(srp)
 
-            other_trip_list.append((trip.to_dict(), creator_name, participants, scores))
+            other_trip_list.append((trip.to_dict(), creator_name, participants, score_list))
 
     sust = {
-        "usr": usr.to_dict() if usr else None,
+        "usr": usr,
         "srp": srp,
         "my_trip_list": my_trip_list,
         "other_trip_list": other_trip_list
