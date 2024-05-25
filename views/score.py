@@ -7,7 +7,6 @@ from model.Trip import Trip
 
 def get_blprint():
     score_module = flask.blueprints.Blueprint("score_blpr", __name__,
-                                              url_prefix="/score",
                                               template_folder="templates/score",
                                               static_folder="static")
     srp = sirope.Sirope()
@@ -22,9 +21,7 @@ def score_add(trip_id):
     if flask.request.method == "POST":
         rating = flask.request.form.get("edRating", "").strip()
         comment = flask.request.form.get("edComment", "").strip()
-        # print(f"Debug: rating = {rating}")
-        # print(f"Debug: comment = {comment}")
-
+        
         trip = srp.load(srp.oid_from_safe(trip_id))
         user = current_user.to_dict()
         trip_data = trip.to_dict()

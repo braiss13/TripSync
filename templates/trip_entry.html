@@ -20,24 +20,24 @@
         <div>
             <br>
             <span><u>Scores</u>: 
-                {% if trip['scores'] %}
+                {% if scores %}
                     {% for score in scores %}
-                            <div>
-                                <b>User:</b> <a href="{{ url_for('user_blpr.user_profile', user_id=score['user']['email']) }}">{{ score['user']['email'] }}</a><br/>
-                                <b>Rating:</b>
-                                <span class="stars">
-                                    {% for i in range(1, 6) %}
-                                        {% if i <= score['rating'] %}
-                                            <i class="fas fa-star filled"></i>
-                                        {% else %}
-                                            <i class="fas fa-star"></i>
-                                        {% endif %}
-                                    {% endfor %}
-                                </span><br/>
-                                <b>Comment:</b> {{ score['comment'] }}<br/>
-                                <b>Date:</b> {{ score['date'] }}
-                            </div>
-                            <br>
+                        <div>
+                            <b>User:</b> <a href="{{ url_for('user_blpr.user_profile', user_id=score['user']['email']) }}">{{ score['user']['email'] }}</a><br/>
+                            <b>Rating:</b>
+                            <span class="stars">
+                                {% for i in range(1, 6) %}
+                                    {% if i <= score['rating'] %}
+                                        <i class="fas fa-star filled"></i>
+                                    {% else %}
+                                        <i class="fas fa-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </span><br/>
+                            <b>Comment:</b> {{ score['comment'] }}<br/>
+                            <b>Date:</b> {{ score['date'] }}
+                        </div>
+                        <br>
                     {% endfor %}
                 {% else %}
                     No scores yet.
@@ -46,7 +46,7 @@
         </div>
 
         {% if usr['email'] != trip['user_id'] %}
-        <form method="post" action="{{ url_for('trip_blpr.trip_join', trip_id=trip['safe_id']) }}" style="display:inline;">
+        <form method="post" action="{{ url_for('trip_blpr.trip_join', trip_id=trip['id']) }}" style="display:inline;">
             <button type="submit" class="btn btn-primary btn-sm">
                 Join
             </button>
@@ -54,7 +54,7 @@
         {% endif %}
 
         {% if usr['email'] in trip['participants'] %}
-        <form method="post" action="{{ url_for('score_blpr.score_add', trip_id=trip['safe_id']) }}" style="display:inline;">
+        <form method="post" action="{{ url_for('score_blpr.score_add', trip_id=trip['id']) }}" style="display:inline;">
             <button type="submit" class="btn btn-secondary btn-sm">
                 Add Score
             </button>
@@ -63,11 +63,11 @@
     </div>
     <div>
         {% if trip['user_id'] == usr['email'] %}
-        <a href="{{ url_for('trip_blpr.trip_edit', trip_id=trip['safe_id']) }}" class="btn btn-warning btn-sm">
+        <a href="{{ url_for('trip_blpr.trip_edit', trip_id=trip['id']) }}" class="btn btn-warning btn-sm">
             Edit
         </a>
-        <form method="get" action="{{ url_for('trip_blpr.trip_delete') }}" style="display:inline;">
-            <input type="hidden" name="trip_id" value="{{ trip['safe_id'] }}">
+        <form method="post" action="{{ url_for('trip_blpr.trip_delete') }}" style="display:inline;">
+            <input type="hidden" name="trip_id" value="{{ trip['id'] }}">
             <button type="submit" class="btn btn-danger btn-sm">
                 Delete
             </button>

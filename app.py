@@ -3,8 +3,6 @@ import flask
 import flask_login
 import sirope
 
-from flask_login import current_user
-
 from model.User import User
 from model.Trip import Trip
 from model.Score import Score
