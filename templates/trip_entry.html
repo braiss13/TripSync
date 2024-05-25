@@ -45,7 +45,7 @@
             </span>
         </div>
 
-        {% if usr.id != trip.creator["id"] %}
+        {% if usr.id != trip.creator["id"] and not trip.is_participant(usr) %}
         <form method="post" action="{{ url_for('trip_blpr.trip_join') }}" style="display:inline;">
             <input type="hidden" name="trip_id" value="{{ trip.get_safe_id(srp) }}">
             <button type="submit" class="btn btn-primary btn-sm">
@@ -55,7 +55,7 @@
         {% endif %}
 
         {% if trip.is_participant(usr) and trip.can_add_score(usr) %}
-        <form method="post" action="{{ url_for('score_blpr.score_add', trip_id=trip.get_safe_id(srp)) }}" style="display:inline;">
+        <form action="{{ url_for('score_blpr.score_add', trip_id=trip.get_safe_id(srp)) }}" style="display:inline;">
             <button type="submit" class="btn btn-secondary btn-sm">
                 Add Score
             </button>

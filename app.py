@@ -80,15 +80,8 @@ def main():
     if usr:
         my_trip_list = [trip for trip in srp.filter(Trip, lambda trip_: trip_.creator["id"] == usr.id)]
 
-        # TODO: Participants is a list of strings, not a list of User objects
         for trip in srp.filter(Trip, lambda trip_: trip_.creator["id"] != usr.id):
             other_trip_list.append(trip)
-
-    print("[DEBUG APP]")
-    print("My trips: ")
-    pprint(my_trip_list)
-    print("Other trips: ")
-    pprint(other_trip_list)
 
     sust = {
         "usr": usr,

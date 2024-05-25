@@ -7,7 +7,7 @@
 <div id="dvAddRating" class="card" style="margin: 10px">
     <div class="card-header">Add New Score</div>
     <div class="card-body">
-        <form id="frmNewRating" name="frmNewRating" action="/score/add/{{ trip_id }}" method="POST">
+        <form id="frmNewRating" name="frmNewRating" action="/score/add/{{ trip_id }}" method="post">
             <label for="edRating">Rating</label>
             <input type="number" min="1" max="5" id="edRating" name="edRating" placeholder="rating (1-5)..." class="form-control" required />
             <br/>
