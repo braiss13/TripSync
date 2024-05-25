@@ -23,6 +23,18 @@
             </div>
         </div>
 
+        <div>
+            {% set error_list = get_flashed_messages(with_categories=True) %}
+            {% if error_list %}
+                {% for category, message in error_list %}
+                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show" role="alert" aria-label="error:">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
         <div style="margin-top: 20px;">
             {% block contents %}
             {% endblock %}

@@ -44,20 +44,20 @@ def login():
         flask_login.logout_user()
         flask.flash("Something strange happened. Please log in again.", "danger")
         return flask.redirect("/")
-    
+
     usr_email = flask.request.form.get("edEmail", "").strip()
     usr_pswd = flask.request.form.get("edPswd", "").strip()
 
     if not usr_email or not usr_pswd:
         flask.flash("Incomplete credentials", "danger")
         return flask.redirect("/")
-    
+
     usr = User.find(srp, usr_email)
 
     if not usr or not usr.chk_pswd(usr_pswd):
         flask.flash("Incorrect credentials: Have you registered?", "danger")
         return flask.redirect("/")
-    
+
     flask_login.login_user(usr)
     flask.flash("Login successful!", "success")
     return flask.redirect("/")
@@ -75,20 +75,20 @@ def main():
     my_trip_list = []
     other_trip_list = []
 
+    from pprint import pprint # REMOVEME
+
     if usr:
-        my_trip_list = [(trip.to_dict(), f"{usr.name} {usr.surname}") for trip in srp.filter(Trip, lambda t: t.user_id == usr.email)]
-        
-        for trip in srp.filter(Trip, lambda t: t.user_id != usr.email):
-            creator = User.find(srp, trip.user_id)
-            creator_name = f"{creator.name} {creator.surname}"
-            participants = [f"{User.find(srp, p).name} {User.find(srp, p).surname}" for p in trip.participants]
+        my_trip_list = [trip for trip in srp.filter(Trip, lambda trip_: trip_.creator["id"] == usr.id)]
 
-            score_list = srp.load_all(Score)    
-            
-            trip_dict = trip.to_dict()
-            trip_dict['safe_id'] = trip.get_safe_id(srp)
+        # TODO: Participants is a list of strings, not a list of User objects
+        for trip in srp.filter(Trip, lambda trip_: trip_.creator["id"] != usr.id):
+            other_trip_list.append(trip)
 
-            other_trip_list.append((trip.to_dict(), creator_name, participants, score_list))
+    print("[DEBUG APP]")
+    print("My trips: ")
+    pprint(my_trip_list)
+    print("Other trips: ")
+    pprint(other_trip_list)
 
     sust = {
         "usr": usr,

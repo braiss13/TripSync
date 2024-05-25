@@ -1,16 +1,20 @@
 import sirope
 from datetime import datetime
+from .User import User
+from .Score import Score
 
-class Trip():
-    def __init__(self, time, origin, destination, duration, fare, user_id):
-        self.__time = time
-        self.__origin = origin
-        self.__destination = destination
-        self.__duration = duration
-        self.__fare = fare
-        self.__user_id = user_id
-        self.__participants = []
-        self.__scores = []
+class Trip:
+    def __init__(self, time: datetime, origin: str, destination: str, duration: int, fare: int | float, creator: dict) -> None:
+        self.__time: datetime = time
+        self.__origin: str = origin
+        self.__destination: str = destination
+        self.__duration: int = duration
+        self.__fare: int | float = fare
+        self.__creator: dict = creator
+        
+        # Instance-generated attributes:
+        self.__participants: list[dict] = []
+        self.__scores: list[dict] = []
 
     @property
     def time(self):
@@ -53,10 +57,6 @@ class Trip():
         self.__fare = value
     
     @property
-    def user_id(self):
-        return self.__user_id
-    
-    @property
     def participants(self):
         return self.__participants
 
@@ -65,15 +65,22 @@ class Trip():
             self.__participants.append(participant_email)
 
     def is_participant(self, user):
-        return user.email in self.__participants
+        return user.id in [participant['id'] for participant in self.__participants]
     
     @property
     def scores(self):
         return self.__scores
     
-    def add_score(self, score_id):
-        if score_id not in self.__scores:
-            self.__scores.append(score_id)
+    @property
+    def creator(self):
+        return self.__creator
+    
+    def add_score(self, user, score):
+        if not user.id in [score['user']['id'] for score in self.scores]:
+            self.scores.append(score)
+    
+    def can_add_score(self, user):
+        return not user.id in [score['user']['id'] for score in self.scores]
     
     def get_safe_id(self, srp):
         return srp.safe_from_oid(self.__oid__)
@@ -81,7 +88,7 @@ class Trip():
     def get_formatted_time(self):
         dt = datetime.strptime(self.__time, '%Y-%m-%dT%H:%M')
         return dt.strftime('%d-%m-%Y %H:%M')
-    
+    """
     def to_dict(self):
         return {
             "time": self.__time,
@@ -89,7 +96,14 @@ class Trip():
             "destination": self.__destination,
             "duration": self.__duration,
             "fare": self.__fare,
-            "user_id": self.__user_id,
+            "creator": self.__creator.to_dict(),
             "participants": self.__participants,
             "scores": self.__scores
         }
+    """
+    
+    def __repr__(self) -> str:
+        return f"Trip({self.__time}, {self.__origin}, {self.__destination}, {self.__duration}, {self.__fare}, {self.__creator})"
+    
+    def __str__(self) -> str:
+        return f"Trip({self.__time}, {self.__origin}, {self.__destination}, {self.__duration}, {self.__fare}, {self.__creator})"

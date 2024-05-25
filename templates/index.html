@@ -7,7 +7,7 @@
   <div class="card-body">
       {% if my_trip_list %}
           <ul class="list-group list-group-flush list-group-numbered">
-          {% for trip, creator_name in my_trip_list %}
+          {% for trip in my_trip_list %}
               <li class="list-group-item">
                   {% include "trip_entry.html" %}
               </li>
@@ -17,12 +17,12 @@
           <b>No trips found...</b>
       {% endif %}
       <div id="dvButtons" style="margin-top: 5%">
-          <a class="btn btn-primary" href="/trip/add" role="button">
-              <img width="24px" src="/static/add.svg" title="add" />
-              &nbsp;
-              Add Trip
-          </a>
-      </div>
+        <a class="btn btn-primary" href="{{ url_for('trip_blpr.trip_add') }}" role="button">
+            <img width="24px" src="/static/add.svg" title="add" />
+            &nbsp;
+            Add Trip
+        </a>
+    </div>
   </div>
 </div>
 
@@ -31,7 +31,7 @@
   <div class="card-body">
       {% if other_trip_list %}
           <ul class="list-group list-group-flush list-group-numbered">
-            {% for trip, creator_name, participants, scores in other_trip_list %}
+            {% for trip in other_trip_list %}
               <li class="list-group-item">
                   {% include "trip_entry.html" %}
               </li>
@@ -113,3 +113,16 @@
 </div>
 {% endif %}
 {% endblock %}
+
+<div style="margin-top: 20px;">
+    {% set error_list = get_flashed_messages(with_categories=True) %}
+    {% if error_list %}
+        {% for category, message in error_list %}
+            <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show" role="alert" aria-label="error:">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+

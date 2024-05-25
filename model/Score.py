@@ -1,17 +1,14 @@
 import sirope
 from datetime import datetime
+from .User import User
 
 class Score:
-    def __init__(self, trip, user, rating, comment="", date=None):
-        self.__trip = trip
-        self.__user = user
-        self.__rating = rating
-        self.__comment = comment
-        self.__date = date if date else datetime.now()
-
-    @property
-    def trip(self):
-        return self.__trip
+    
+    def __init__(self, user: dict, rating: int = 0, comment: str = "", date: datetime | None = None):
+        self.__user: dict = user
+        self.__rating: int = int(rating)
+        self.__comment: str = comment
+        self.__date: datetime = date if date is not None else datetime.now()
 
     @property
     def user(self):
@@ -19,7 +16,7 @@ class Score:
 
     @property
     def rating(self):
-        return self.__rating
+        return int(self.__rating)
 
     @property
     def comment(self):
@@ -34,9 +31,14 @@ class Score:
 
     def to_dict(self):
         return {
-            "trip": self.__trip.to_dict(),
-            "user": self.__user.to_dict(),
-            "rating": self.__rating,
+            "user": self.__user,
+            "rating": int(self.__rating),
             "comment": self.__comment,
             "date": self.__date.strftime('%Y-%m-%d %H:%M:%S')
         }
+    
+    def __repr__(self) -> str:
+        return f"Score({self.__user}, {self.__rating}, {self.__comment}, {self.__date})"
+    
+    def __str__(self) -> str:
+        return f"Score({self.__user}, {self.__rating}, {self.__comment}, {self.__date})"

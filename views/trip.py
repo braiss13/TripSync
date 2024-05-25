@@ -8,6 +8,7 @@ from datetime import datetime
 
 def get_blprint():
     trip_module = flask.blueprints.Blueprint("trip_blpr", __name__,
+                                             url_prefix="/trip",
                                              template_folder="templates/trip",
                                              static_folder="static")
     srp = sirope.Sirope()
@@ -15,7 +16,7 @@ def get_blprint():
  
 trip_blpr, srp = get_blprint()
 
-@trip_blpr.route("/trip/add", methods=["GET", "POST"])
+@trip_blpr.route("/add", methods=["GET", "POST"])
 @login_required
 def trip_add():
     if flask.request.method == "POST":
@@ -35,7 +36,7 @@ def trip_add():
             flask.flash("Duration must be an integer and fare must be a number.", "danger")
             return flask.redirect("/trip/add")
 
-        trip = Trip(time, origin, destination, duration, fare, current_user.get_id())
+        trip = Trip(time, origin, destination, duration, fare, current_user.to_dict())
         srp.save(trip)
         flask.flash("Trip added successfully.", "success")
         return flask.redirect("/")
@@ -44,7 +45,7 @@ def trip_add():
     min_date_time = datetime.now().strftime('%Y-%m-%dT%H:%M')
     return flask.render_template("add_trip.html", usr=usr, min_date_time=min_date_time, srp=srp)
 
-@trip_blpr.route("/trip/edit/<trip_id>", methods=["GET", "POST"])
+@trip_blpr.route("/edit/<trip_id>", methods=["GET", "POST"])
 @login_required
 def trip_edit(trip_id):
     trip_oid = srp.oid_from_safe(trip_id)
@@ -81,18 +82,17 @@ def trip_edit(trip_id):
     return flask.render_template("edit_trip.html", trip=trip, usr=usr, min_date_time=min_date_time, srp=srp)
 
 @login_required
-@trip_blpr.route('/trip/delete', methods=['POST'])
+@trip_blpr.route('/delete', methods=['POST'])
 def trip_delete():
-    trip_id = flask.request.form.get("trip_id")
-    trip_oid = srp.oid_from_safe(trip_id)
+    trip_safe_id = flask.request.form.get("trip_id")
+    trip_oid = srp.oid_from_safe(trip_safe_id)
     
     if not trip_oid:
         flask.flash("Invalid Trip ID.", "danger")
         return flask.redirect("/")
     
     if srp.exists(trip_oid):
-        trip = srp.load(trip_oid)
-        srp.delete(trip)
+        srp.delete(trip_oid)
         flask.flash("Trip deleted successfully.", "success")
     else:
         flask.flash("Trip not found.", "danger")
@@ -101,15 +101,25 @@ def trip_delete():
 
 
 @login_required
-@trip_blpr.route("/trip/join/<trip_id>", methods=["POST"])
-def trip_join(trip_id):
-    trip_oid = srp.oid_from_safe(trip_id)
-    trip = srp.load(trip_oid)
+@trip_blpr.route("/join", methods=["POST"])
+def trip_join():
+    trip_safe_id = flask.request.form.get("trip_id")
     
+    if not trip_safe_id:
+        flask.flash("Trip ID is missing.", "danger")
+        return flask.redirect("/")
+    
+    trip_oid = srp.oid_from_safe(trip_safe_id)
+    
+    if not trip_oid:
+        flask.flash("Invalid Trip ID.", "danger")
+        return flask.redirect("/")
+    
+    trip = srp.load(trip_oid)
     usr = current_user
 
-    if usr.email not in trip.participants and len(trip.participants) < 4:
-        trip.add_participant(current_user.email)
+    if usr not in trip.participants and len(trip.participants) < 4:
+        trip.add_participant(usr.to_dict())
         srp.save(trip)
         flask.flash("You have successfully joined the trip.", "success")
     else:
