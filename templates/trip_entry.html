@@ -22,22 +22,7 @@
             <span><u>Scores</u>:
                 {% if trip.scores %}
                     {% for score in trip.scores %}
-                        <div>
-                            <b>User:</b> <a href="{{ url_for('user_blpr.user_profile', user_id=score['user']['id']) }}">{{ score['user']['name'] }} {{ score['user']['surname'] }}</a><br/>
-                            <b>Rating:</b>
-                            <span class="stars">
-                                {% for i in range(1, 6) %}
-                                    {% if i <= score.rating %}
-                                        <i class="fas fa-star filled"></i>
-                                    {% else %}
-                                        <i class="fas fa-star"></i>
-                                    {% endif %}
-                                {% endfor %}
-                            </span><br/>
-                            <b>Comment:</b> {{ score.comment }}<br/>
-                            <b>Date:</b> {{ score.date }}
-                        </div>
-                        <br>
+                        {% include "score_entry.html" %}
                     {% endfor %}
                 {% else %}
                     No scores yet.
@@ -61,6 +46,7 @@
             </button>
         </form>
         {% endif %}
+
     </div>
     <div>
         {% if trip.creator["id"] == usr.id %}

@@ -1,11 +1,15 @@
 <div>
-    {% if score.get("error") %}
-        <b>{{ score.error }}</b><br/>
-    {% else %}
-        <b>Rating:</b>&nbsp;<span style="font-size: 100%">{{ score.rating }}</span><br/>
-        <b>Comment:</b>&nbsp;<span style="font-size: 100%">{{ score.comment }}</span><br/>
-        <b>Trip:</b>&nbsp;<span style="font-size: 100%">{{ score.trip.origin }} to {{ score.trip.destination }}</span><br/>
-        <b>Date:</b>&nbsp;<span style="font-size: 100%">{{ score.date }}</span><br/>
-        <b>User:</b>&nbsp;<span style="font-size: 100%">{{ score.user['name'] }} {{ score.user['surname'] }}</span><br/>
-    {% endif %}
+    <b>User:</b> <a href="{{ url_for('user_blpr.user_profile', user_id=score['user']['id']) }}">{{ score['user']['name'] }} {{ score['user']['surname'] }}</a><br/>
+    <b>Rating:</b>
+    <span class="stars">
+        {% for i in range(1, 6) %}
+            {% if i <= score.rating %}
+                <i class="fas fa-star filled"></i>
+            {% else %}
+                <i class="fas fa-star"></i>
+            {% endif %}
+        {% endfor %}
+    </span><br/>
+    <b>Comment:</b> {{ score.comment }}<br/>
+    <b>Date:</b> {{ score.date }}<br/>
 </div>

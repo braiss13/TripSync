@@ -18,7 +18,7 @@ def generate_uuid(email: str) -> str:
     Returns:
         A unique identifier for the user.
     """
-    return "".join(f"{str(ord(letter)).zfill(3)}" for letter in email)
+    return "".join(str(ord(letter)) for letter in email)
 
 class User(flask_login.mixins.UserMixin):
     def __init__(self, email: str, password: str, name: str, surname: str, age: int | str, phone: str) -> None:
@@ -70,10 +70,6 @@ class User(flask_login.mixins.UserMixin):
     @staticmethod
     def find(srp: sirope.Sirope, email: str) -> User:
         return srp.find_first(User, lambda u: u.email == email)
-
-    def get_full_name(self):
-        return f"{self.__name} {self.__surname}"
-
     
     def to_dict(self):
         return {
@@ -84,10 +80,3 @@ class User(flask_login.mixins.UserMixin):
             "phone": self.__phone,
             "id": self.id
         }
-    
-    def __repr__(self):
-        return f"User({self.__email}, {self.__name}, {self.__surname}, {self.__age}, {self.__phone})"
-    
-    def __str__(self):
-        return f"User({self.__email}, {self.__name}, {self.__surname}, {self.__age}, {self.__phone})"
-        

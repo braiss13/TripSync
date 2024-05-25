@@ -9,7 +9,7 @@ class Trip:
         self.__origin: str = origin
         self.__destination: str = destination
         self.__duration: int = duration
-        self.__fare: int | float = fare
+        self.__fare: float = float(fare)
         self.__creator: dict = creator
         
         # Instance-generated attributes:
@@ -101,9 +101,3 @@ class Trip:
             "scores": self.__scores
         }
     """
-    
-    def __repr__(self) -> str:
-        return f"Trip({self.__time}, {self.__origin}, {self.__destination}, {self.__duration}, {self.__fare}, {self.__creator})"
-    
-    def __str__(self) -> str:
-        return f"Trip({self.__time}, {self.__origin}, {self.__destination}, {self.__duration}, {self.__fare}, {self.__creator})"

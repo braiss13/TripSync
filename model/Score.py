@@ -10,6 +10,7 @@ class Score:
         self.__comment: str = comment
         self.__date: datetime = date if date is not None else datetime.now()
 
+
     @property
     def user(self):
         return self.__user
@@ -29,16 +30,11 @@ class Score:
     def get_safe_id(self, srp):
         return srp.safe_from_oid(self.__oid__)
 
-    def to_dict(self):
+    def to_dict(self, srp):
         return {
             "user": self.__user,
             "rating": int(self.__rating),
             "comment": self.__comment,
-            "date": self.__date.strftime('%Y-%m-%d %H:%M:%S')
+            "date": self.__date.strftime('%Y-%m-%d %H:%M:%S'),
+            "safe_id": self.get_safe_id(srp)  # Añadir safe_id al diccionario ¡¡¡¡¡REVISAR!!!!
         }
-    
-    def __repr__(self) -> str:
-        return f"Score({self.__user}, {self.__rating}, {self.__comment}, {self.__date})"
-    
-    def __str__(self) -> str:
-        return f"Score({self.__user}, {self.__rating}, {self.__comment}, {self.__date})"
