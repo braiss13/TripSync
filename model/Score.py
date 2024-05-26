@@ -1,40 +1,54 @@
-import sirope
 from datetime import datetime
-from .User import User
 
 class Score:
-    
-    def __init__(self, user: dict, rating: int = 0, comment: str = "", date: datetime | None = None):
-        self.__user: dict = user
+
+    def __init__(self, rating: int, comment: str, creator: tuple[str, str]):
         self.__rating: int = int(rating)
         self.__comment: str = comment
-        self.__date: datetime = date if date is not None else datetime.now()
+        self.__creator: tuple[str, str] = creator
+        
+        self.__date: datetime = datetime.now()
 
+    def get_id(self, srp) -> str:
+        return srp.safe_from_oid(self.__oid__)
 
     @property
     def user(self):
         return self.__user
 
+    @user.setter
+    def user(self, value):
+        if not isinstance(value, str):
+            raise ValueError("User must be a string")
+        
+        self.__user = value
+
     @property
     def rating(self):
         return int(self.__rating)
+
+    @rating.setter
+    def rating(self, value):
+        if not isinstance(value, int):
+            raise ValueError("Rating must be an integer")
+        
+        if not 0 <= value <= 5:
+            raise ValueError("Rating must be between 0 and 5")
+
+        self.__rating = int(value)
 
     @property
     def comment(self):
         return self.__comment
 
+    @comment.setter
+    def comment(self, value):
+        self.__comment = value
+
+    @property
+    def creator(self):
+        return self.__creator
+
     @property
     def date(self):
         return self.__date
-    
-    def get_safe_id(self, srp):
-        return srp.safe_from_oid(self.__oid__)
-
-    def to_dict(self, srp):
-        return {
-            "user": self.__user,
-            "rating": int(self.__rating),
-            "comment": self.__comment,
-            "date": self.__date.strftime('%Y-%m-%d %H:%M:%S'),
-            "safe_id": self.get_safe_id(srp)  # Añadir safe_id al diccionario ¡¡¡¡¡REVISAR!!!!
-        }

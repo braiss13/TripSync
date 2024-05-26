@@ -21,20 +21,16 @@ def score_add(trip_id):
     if flask.request.method == "POST":
         rating = flask.request.form.get("edRating", "").strip()
         comment = flask.request.form.get("edComment", "").strip()
-        
-        trip = srp.load(srp.oid_from_safe(trip_id))
-        user = current_user  # revisar
 
-        try:
-            rating = int(rating)
-        except Exception:
-            rating = 0
-            
-        score = Score(user.to_dict(), rating, comment)
+        trip = srp.load(srp.oid_from_safe(trip_id))
+        user = current_user
+
+        # Pass Score element as (user_id, full_user_name) tuple
+        score = Score(rating, comment, (user.get_id(), user.name + " " + user.surname))
         srp.save(score)
-        trip.add_score(user, score.to_dict()) 
+        trip.add_score(score.get_id(srp), score)
         srp.save(trip)
         flask.flash("Rating added successfully.", "success")
         return flask.redirect("/")
-    
+
     return flask.render_template("add_score.html", usr=current_user, trip_id=trip_id)

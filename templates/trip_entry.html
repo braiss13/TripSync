@@ -1,74 +1,110 @@
-<div class="d-flex justify-content-between align-items-center">
+<div>
+  <div style="display: flex; column-gap: 0.5rem; margin-bottom: 1rem;">
+    {% if usr.get_id() == trip.creator[0] %}
+    <a href="{{ url_for('trip_blpr.trip_edit', trip_id=trip.get_id(srp)) }}" class="btn btn-warning btn-sm">
+      Edit
+    </a>
+    <form method="post" action="{{ url_for('trip_blpr.trip_delete') }}" style="display:inline;">
+      <input type="hidden" name="trip_id" value="{{ trip.get_id(srp) }}">
+      <button type="submit" class="btn btn-danger btn-sm">
+        Delete
+      </button>
+    </form>
+    {% else %}
+
+    {% if usr.get_id() != trip.creator[0] and not trip.is_participant(usr) %}
+    <form method="post" action="{{ url_for('trip_blpr.trip_join') }}" style="display:inline;">
+      <input type="hidden" name="trip_id" value="{{ trip.get_id(srp) }}">
+      <button type="submit" class="btn btn-primary btn-sm">
+        Join
+      </button>
+    </form>
+    {% endif %}
+
+    {% if trip.is_participant(usr) and not trip.has_reviewed(usr) %}
+    <form action="{{ url_for('score_blpr.score_add', trip_id=trip.get_id(srp)) }}" style="display:inline;">
+      <button type="submit" class="btn btn-secondary btn-sm">
+        Add Score
+      </button>
+    </form>
+    {% endif %}
+    {% endif %}
+  </div>
+  <div
+    style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: center; align-items: top;">
     <div>
-        <b>{{ trip.origin }} to {{ trip.destination }}</b><br/>
-        <span>{{ trip.time }} | Duration: {{ trip.duration }} mins | Fare: {{ trip.fare }} €</span><br/>
-        <span>Created by: <a href="{{ url_for('user_blpr.user_profile', user_id=trip.creator['id']) }}">{{ trip.creator["name"] }}</a></span>
-
-        <div>
-            <br>
-            <span><i>Participants</i>:
-                {% if trip.participants %}
-                    {% for participant in trip.participants %}
-                        <a href="{{ url_for('user_blpr.user_profile', user_id=participant.id) }}">{{ participant.name }} {{ participant.surname }}</a>{% if not loop.last %}, {% endif %}
-                    {% endfor %}
-                {% else %}
-                    No participants yet.
-                {% endif %}
-            </span>
+      {% if usr.get_id() == trip.creator[0] %}
+      <h5>{{ trip.origin }} &rarr; {{ trip.destination }}</h5>
+      {% else %}
+      <div>
+        <div style="display: flex; column-gap: 0.5rem;">
+          <h5>{{ trip.origin }} &rarr; {{ trip.destination }}</h5>
+          <em>(created by <a href="{{ url_for('user_blpr.user_profile', user_id=trip.creator[0]) }}">{{
+              trip.creator[1] }}</a>)</em>
         </div>
-
-        <div>
-            <br>
-            <span><u>Scores</u>:
-                {% if trip.scores %}
-                    {% for score in trip.scores %}
-                        {% include "score_entry.html" %}
-                    {% endfor %}
-                {% else %}
-                    No scores yet.
-                {% endif %}
-            </span>
-        </div>
-
-        {% if usr.id != trip.creator["id"] and not trip.is_participant(usr) %}
-        <form method="post" action="{{ url_for('trip_blpr.trip_join') }}" style="display:inline;">
-            <input type="hidden" name="trip_id" value="{{ trip.get_safe_id(srp) }}">
-            <button type="submit" class="btn btn-primary btn-sm">
-                Join
-            </button>
-        </form>
-        {% endif %}
-
-        {% if trip.is_participant(usr) and trip.can_add_score(usr) %}
-        <form action="{{ url_for('score_blpr.score_add', trip_id=trip.get_safe_id(srp)) }}" style="display:inline;">
-            <button type="submit" class="btn btn-secondary btn-sm">
-                Add Score
-            </button>
-        </form>
-        {% endif %}
-
+      </div>
+      {% endif %}
+      <ul>
+        <li><b>Time:</b> {{ trip.time }}</li>
+        <li><b>Duration:</b> {% if trip.duration > 60 %} {{ trip.duration // 60 }}h {{ trip.duration % 60 }}min
+          {%else%} {{ trip.duration }}min {%endif%}</li>
+        <li><b>Fare:</b> {{ trip.fare }}€</li>
+      </ul>
     </div>
     <div>
-        {% if trip.creator["id"] == usr.id %}
-        <a href="{{ url_for('trip_blpr.trip_edit', trip_id=trip.get_safe_id(srp)) }}" class="btn btn-warning btn-sm">
-            Edit
-        </a>
-        <form method="post" action="{{ url_for('trip_blpr.trip_delete') }}" style="display:inline;">
-            <input type="hidden" name="trip_id" value="{{ trip.get_safe_id(srp) }}">
-            <button type="submit" class="btn btn-danger btn-sm">
-                Delete
-            </button>
-        </form>
+      <h5>Participants</h5>
+      <span>
+        {% if trip.participants %}
+        <div
+          style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));  grid-template-rows: repeat(2, minmax(0, 1fr));  justify-content: center;  align-items: center;  text-align: left; row-gap: 0.5rem;">
+          {% for participant in trip.participants %}
+          <div
+            style="display: flex; column-gap: 0.5rem; justify-content: left;  align-items: center;  text-align: center;">
+            <div
+              style="display: flex; justify-content: center; padding: 0.5rem; border-radius: 9999px; width: 32px; height: 32px; background-color: #374151; ">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <em><a href="{{ url_for('user_blpr.user_profile', user_id=participant[0]) }}">{{ participant[1] }}</a>{% if
+              not loop.last %} {% endif %}</em>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        No participants yet.
         {% endif %}
+      </span>
     </div>
+  </div>
+  <div>
+    <div>
+      <hr>
+
+      <div>
+        <div>
+          {% if trip.scores %}
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));  gap: 1rem; ">
+            {% for score in trip.scores %}
+            {% include "score_entry.html" %}
+        
+          {% endfor %}
+        </div>
+          {% else %}
+          No scores yet.
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+  </div>
 </div>
 
 <style>
-    .stars .fa-star {
-        color: transparent;
-        -webkit-text-stroke: 1px #FFD700;
-    }
-    .stars .fa-star.filled {
-        color: #FFD700;
-    }
+  .stars .fa-star {
+    color: transparent;
+    -webkit-text-stroke: 1px #FFD700;
+  }
+
+  .stars .fa-star.filled {
+    color: #FFD700;
+  }
 </style>

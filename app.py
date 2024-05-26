@@ -75,12 +75,13 @@ def main():
     my_trip_list = []
     other_trip_list = []
 
-    from pprint import pprint # REMOVEME
-
     if usr:
-        my_trip_list = [trip for trip in srp.filter(Trip, lambda trip_: trip_.creator["id"] == usr.id)]
+        my_trip_list = [
+            trip
+            for trip in srp.filter(Trip, lambda trip_: trip_.creator[0] == usr.get_id())
+        ]
 
-        for trip in srp.filter(Trip, lambda trip_: trip_.creator["id"] != usr.id):
+        for trip in srp.filter(Trip, lambda trip_: trip_.creator[0] != usr.get_id()):
             other_trip_list.append(trip)
 
     sust = {

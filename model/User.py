@@ -1,26 +1,9 @@
-from __future__ import annotations
-
 import flask_login
 import sirope
 import werkzeug.security as safe
 
-def generate_uuid(email: str) -> str:
-    """Generate a unique user identifier based on the email address.
-    
-    The process is described as follows:
-        1. Get the ASCII code of each letter in the email address (ord).
-        2. Convert the ASCII code to a string and fill it with zeros to make it 3 characters long (zfill).
-        3. Concatenate all the strings obtained in the previous step.
-    
-    Args:
-        email: The email address of the user.
-        
-    Returns:
-        A unique identifier for the user.
-    """
-    return "".join(str(ord(letter)) for letter in email)
-
 class User(flask_login.mixins.UserMixin):
+
     def __init__(self, email: str, password: str, name: str, surname: str, age: int | str, phone: str) -> None:
         self.__email: str = email
         self.__pswd: str = safe.generate_password_hash(password)
@@ -28,31 +11,9 @@ class User(flask_login.mixins.UserMixin):
         self.__surname: str = surname
         self.__age: int | str = age
         self.__phone: str = phone
-        
-        self.id = generate_uuid(self.email)
 
-    @property
-    def email(self):
+    def get_id(self) -> str:
         return self.__email
-
-    @property
-    def name(self):
-        return self.__name
-
-    @property
-    def surname(self):
-        return self.__surname
-
-    @property
-    def age(self):
-        return self.__age
-
-    @property
-    def phone(self):
-        return self.__phone
-
-    def get_id(self):
-        return self.email
 
     def chk_pswd(self, other_pswd):
         return safe.check_password_hash(self.__pswd, other_pswd)
@@ -68,15 +29,62 @@ class User(flask_login.mixins.UserMixin):
         return usr
 
     @staticmethod
-    def find(srp: sirope.Sirope, email: str) -> User:
+    def find(srp: sirope.Sirope, email: str) -> "User":
         return srp.find_first(User, lambda u: u.email == email)
     
-    def to_dict(self):
-        return {
-            "email": self.__email,
-            "name": self.__name,
-            "surname": self.__surname,
-            "age": self.__age,
-            "phone": self.__phone,
-            "id": self.id
-        }
+    # Getters and setters:
+
+    @property
+    def email(self):
+        return self.__email
+
+    @email.setter
+    def email(self, value):
+        if not isinstance(value, str):
+            raise TypeError("Email must be a string")
+
+        self.__email = value
+
+    @property
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, value):
+        if not isinstance(value, str):
+            raise TypeError("Name must be a string")
+        
+        self.__name = value
+
+    @property
+    def surname(self):
+        return self.__surname
+
+    @surname.setter
+    def surname(self, value):
+        if not isinstance(value, str):
+            raise TypeError("Surname must be a string")
+        
+        self.__surname = value
+
+    @property
+    def age(self):
+        return self.__age
+
+    @age.setter
+    def age(self, value):
+        if not isinstance(value, int) and not isinstance(value, str):
+            raise TypeError("Age must be an integer or a string")
+        
+        self.__age = value
+
+    @property
+    def phone(self):
+        return self.__phone
+
+    @phone.setter
+    def phone(self, value):
+        if not isinstance(value, str):
+            raise TypeError("Phone must be a string")
+        
+        self.__phone = value

@@ -1,0 +1,17 @@
+.bgimg {
+    top: 0; 
+    left: 0; 
+    width: 100vw; 
+    height: 100vh; 
+    background-image: url("/static/car.jpg");
+    background-position: center center;
+}
+
+.formulario-desenfocado {
+    background: rgba(255, 255, 255, 0.3); 
+    border: 1px solid #ccc;
+    padding: 20px; 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); 
+    border-radius: 10px;
+}

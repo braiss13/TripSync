@@ -4,7 +4,7 @@
 <div class="card" style="margin: 10px">
     <div class="card-header">Edit Trip</div>
     <div class="card-body">
-        <form method="POST" action="{{ url_for('trip_blpr.trip_edit', trip_id=trip.get_safe_id(srp)) }}">
+        <form method="POST" action="{{ url_for('trip_blpr.trip_edit', trip_id=trip.get_id(srp)) }}">
             <div class="mb-3">
                 <label for="edTime" class="form-label">Time</label>
                 <input type="datetime-local" class="form-control" id="edTime" name="edTime" value="{{ trip.time }}" min="{{ min_date_time }}">
