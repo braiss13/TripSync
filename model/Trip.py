@@ -2,6 +2,9 @@ from datetime import datetime
 from .User import User
 from .Score import Score
 
+# This class defines the Trips, with the attributes time, origin, destination, duration, fare, creator,
+# participants list and scores list with their respective getters and setters
+
 class Trip:
 
     def __init__(self, time: datetime, origin: str, destination: str, duration: int, fare: int | float, creator: tuple[str, str]) -> None:

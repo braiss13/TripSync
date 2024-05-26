@@ -1,5 +1,8 @@
 from datetime import datetime
 
+# This class defines the Score, with the attributes rating, comment, creator (score_creator) and date 
+# with their respective getters and setters
+
 class Score:
 
     def __init__(self, rating: int, comment: str, creator: tuple[str, str]):

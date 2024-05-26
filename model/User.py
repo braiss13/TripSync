@@ -2,6 +2,9 @@ import flask_login
 import sirope
 import werkzeug.security as safe
 
+# This class defines the Users, with the attributes email, password, name, surname, age and phone
+# with their respective getters and setters
+
 class User(flask_login.mixins.UserMixin):
 
     def __init__(self, email: str, password: str, name: str, surname: str, age: int | str, phone: str) -> None:
